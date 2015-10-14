@@ -86,9 +86,9 @@ then
 				then
 		
 					comandoGraLog=$(echo ${funcionInvoca%.bash})
-					"$logDetener" "$comandoGraLog" "No se puede detener: "$funcionParametro" porque no esta en ejecucion" "ERR"
+					"$logDetener" "$comandoGraLog" "No se puede detener: $funcionParametro porque no esta en ejecucion" "ERR"
 				else
-					echo "Detener: No se puede detener "$funcionParametro" porque no esta en ejecucion"
+					echo "Detener: No se puede detener $funcionParametro porque no esta en ejecucion"
 				fi
 
 				exit 1
@@ -119,10 +119,10 @@ then
 
 					if [ $resultadoKill -eq 0 ]
 					then
-						"$logDetener" "$comandoGraLog" ""$funcionParametro" se detuvo correctamente"
+						"$logDetener" "$comandoGraLog" "$funcionParametro se detuvo correctamente"
 						exit 0
 					else
-						"$logDetener" "$comandoGraLog" ""$funcionParametro" no se pudo detener" "ERR"
+						"$logDetener" "$comandoGraLog" "$funcionParametro no se pudo detener" "ERR"
 						exit 1
 					fi
 
@@ -143,7 +143,7 @@ then
 				if [ "$hayFuncion" -eq 1 ]
 				then
 					comandoGraLog=$(echo ${funcionInvoca%.bash})
-					"$logDetener" "$comandoGraLog" "No existe PID de "$funcionParametro"" "ERR"
+					"$logDetener" "$comandoGraLog" "No existe PID de $funcionParametro" "ERR"
 				else
 					echo "Detener: No existe PID de "$funcionParametro"" "ERR"
 				fi

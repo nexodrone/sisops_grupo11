@@ -36,7 +36,7 @@ do
 			then
 	
 				#Grabar log
-				"$graLog" "$comando" "Ciclo numero "$CICLOS"" INFO
+				"$graLog" "$comando" "Ciclo numero $CICLOS" INFO
 
 				#Para todos los archivos de novedades
 				cd "$NOVEDIR"
@@ -51,162 +51,172 @@ do
 						chequeo=$(file "$ARCH" --mime-type | grep '^.*: text')
 						if [ "$chequeo" != "" ]
 						then
+
 							#Analizo si tiene mas de dos campos
 							esValido=0
 							tercerCampo=$(echo "$ARCH" | cut -s -d "_" -f 3)
 							if [ "$tercerCampo" == "" ]
-								then
+							then
 								#Analizo codigo de central
 								codCentral=$(echo "$ARCH" | cut -s -d "_" -f 1)
 
-								#Chequeo / en maedir
-								chequeo=$(echo "$MAEDIR" | grep '/$')
-								if [ "$chequeo" == "" ]
+								#Analizo si tiene codigo de central
+								if [ "$codCentral" != "" ]
 								then
-									codArch=$(echo "$MAEDIR"'/CdC.mae')
-								else
-									codArch=$(echo "$MAEDIR"'CdC.mae')
-								fi
-				
-								codValido=$(grep "$codCentral" "$codArch")
-			
-								#Si es valido
-								if [ "$codValido" != "" ]
-								then
-									#Analizo fecha
-									fecha=$(echo "$ARCH" | cut -s -d "_" -f 2)
-									fecha=$(echo ${fecha%.*})
-									anioActual=$(date "+%Y")
-									mesActual=$(date "+%m")
-									diaActual=$(date "+%d")
-									esValido=0
-				
-									#Chequeo principal de la fecha
-									fechaNumerica=$(echo "$fecha" | grep '^[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]$')
-									if [ "$fechaNumerica" != "" ]
-									then
-										#Chequeo mes y sus dias
-										mesFecha=$(echo "$fecha" | cut -c 5,6)
-										diasFecha=$(echo "$fecha" | cut -c 7,8)
-					
-										#Meses con 31 dias
-										if [ "$mesFecha" -eq 1 ] || [ "$mesFecha" -eq 3 ] || [ "$mesFecha" -eq 5 ] || [ "$mesFecha" -eq 7 ] || [ "$mesFecha" -eq 8 ] || [ "$mesFecha" -eq 10 ] || [ "$mesFecha" -eq 12 ]
-										then
-											if [ "$diasFecha" -ge 1 ] && [ "$diasFecha" -le 31 ]
-											then
-												esValido=1
-											fi
-										fi
 
-										#Meses con 30 dias
-										if [ "$mesFecha" -eq 4 ] || [ "$mesFecha" -eq 6 ] || [ "$mesFecha" -eq 9 ] || [ "$mesFecha" -eq 11 ]
+
+									#Chequeo / en maedir
+									chequeo=$(echo "$MAEDIR" | grep '/$')
+									if [ "$chequeo" == "" ]
+									then
+										codArch=$(echo "$MAEDIR"'/CdC.mae')
+									else
+										codArch=$(echo "$MAEDIR"'CdC.mae')
+									fi
+				
+									codValido=$(grep "$codCentral" "$codArch")
+			
+									#Si es valido
+									if [ "$codValido" != "" ]
+									then
+										#Analizo fecha
+										fecha=$(echo "$ARCH" | cut -s -d "_" -f 2)
+										fecha=$(echo ${fecha%.*})
+										anioActual=$(date "+%Y")
+										mesActual=$(date "+%m")
+										diaActual=$(date "+%d")
+										esValido=0
+				
+										#Chequeo principal de la fecha
+										fechaNumerica=$(echo "$fecha" | grep '^[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]$')
+										if [ "$fechaNumerica" != "" ]
 										then
-											if [ "$diasFecha" -ge 1 ] && [ "$diasFecha" -le 30 ]
-											then						
-												esValido=1
-											fi
-										fi
-						
-										#Febrero
-										if [ "$mesFecha" -eq 2 ] && [ "$diasFecha" -ge 1 ] && [ "$diasFecha" -le 28 ]
-										then
-											esValido=1
-										fi
-							
-										#Si estuvo todo en orden
-										if [ "$esValido" -eq 1 ]
-										then
-											#Valido antiguedad del mes con el año y los dias
-											anioFecha=$(echo "$fecha" | cut -c 1-4)
-											let anioValid=$anioActual-$anioFecha
-											esValido=0
-							
-											#Si es de este año
-											if [ "$anioValid" -eq 0 ] 
+											#Chequeo mes y sus dias
+											mesFecha=$(echo "$fecha" | cut -c 5,6)
+											diasFecha=$(echo "$fecha" | cut -c 7,8)
+					
+											#Meses con 31 dias
+											if [ "$mesFecha" -eq 1 ] || [ "$mesFecha" -eq 3 ] || [ "$mesFecha" -eq 5 ] || [ "$mesFecha" -eq 7 ] || [ "$mesFecha" -eq 8 ] || [ "$mesFecha" -eq 10 ] || [ "$mesFecha" -eq 12 ]
 											then
-												#Si el mes es menor al actual
-												if [ "$mesFecha" -lt "$mesActual" ]
+												if [ "$diasFecha" -ge 1 ] && [ "$diasFecha" -le 31 ]
 												then
 													esValido=1
-												else
-													#Si el mes es el mismo y los dias son menores o el mismo
-													if [ "$mesFecha" -eq "$mesActual" ] && [ "$diasFecha" -le "$diaActual" ]
-													then
-														esValido=1
-													fi
 												fi
-											else
-												#Si es del año pasado
-												if [ "$anioValid" -eq 1 ] 
+											fi
+
+											#Meses con 30 dias
+											if [ "$mesFecha" -eq 4 ] || [ "$mesFecha" -eq 6 ] || [ "$mesFecha" -eq 9 ] || [ "$mesFecha" -eq 11 ]
+											then
+												if [ "$diasFecha" -ge 1 ] && [ "$diasFecha" -le 30 ]
+												then						
+													esValido=1
+												fi
+											fi
+						
+											#Febrero
+											if [ "$mesFecha" -eq 2 ] && [ "$diasFecha" -ge 1 ] && [ "$diasFecha" -le 28 ]
+											then
+												esValido=1
+											fi
+							
+											#Si estuvo todo en orden
+											if [ "$esValido" -eq 1 ]
+											then
+												#Valido antiguedad del mes con el año y los dias
+												anioFecha=$(echo "$fecha" | cut -c 1-4)
+												let anioValid=$anioActual-$anioFecha
+												esValido=0
+							
+												#Si es de este año
+												if [ "$anioValid" -eq 0 ] 
 												then
-													#Si el mes es mayor al actual
-													if [ "$mesFecha" -gt "$mesActual" ]
+													#Si el mes es menor al actual
+													if [ "$mesFecha" -lt "$mesActual" ]
 													then
 														esValido=1
 													else
-														#Si el mes es el mismo y los dias son mayores o el mismo
-														if [ "$mesFecha" -eq "$mesActual" ] && [ "$diasFecha" -ge "$diaActual" ]
+														#Si el mes es el mismo y los dias son menores o el mismo
+														if [ "$mesFecha" -eq "$mesActual" ] && [ "$diasFecha" -le "$diaActual" ]
 														then
 															esValido=1
 														fi
 													fi
-												fi
-											fi
-					
-											#Si estuvo todo en orden
-											if [ "$esValido" -eq 1 ]
-											then
-												#lo muevo a ACEPDIR
-			
-												#Chequeo / en NOVEDIR
-												chequeo=$(echo "$NOVEDIR" | grep '/$')
-												if [ "$chequeo" == "" ]
-												then
-													archAmover=$(echo "$NOVEDIR"'/'"$ARCH")
 												else
-													archAmover=$(echo "$NOVEDIR""$ARCH")
+													#Si es del año pasado
+													if [ "$anioValid" -eq 1 ] 
+													then
+														#Si el mes es mayor al actual
+														if [ "$mesFecha" -gt "$mesActual" ]
+														then
+															esValido=1
+														else
+															#Si el mes es el mismo y los dias son mayores o el mismo
+															if [ "$mesFecha" -eq "$mesActual" ] && [ "$diasFecha" -ge "$diaActual" ]
+															then
+																esValido=1
+															fi
+														fi
+													fi
 												fi
-
-												"$moverA" "$archAmover" "$ACEPDIR" "AFRARECI"
-												resultadoMoverA=$?
-
-												#Chequeo que salio todo bien
-												if [ $resultadoMoverA -eq 0 ]
+					
+												#Si estuvo todo en orden
+												if [ "$esValido" -eq 1 ]
 												then
-													"$graLog" "$comando" "Archivo "$archAmover" aceptado" INFO
-												fi
+													#lo muevo a ACEPDIR
+			
+													#Chequeo / en NOVEDIR
+													chequeo=$(echo "$NOVEDIR" | grep '/$')
+													if [ "$chequeo" == "" ]
+													then
+														archAmover=$(echo "$NOVEDIR"'/'"$ARCH")
+													else
+														archAmover=$(echo "$NOVEDIR""$ARCH")
+													fi
 
+													"$moverA" "$archAmover" "$ACEPDIR" "AFRARECI"
+													resultadoMoverA=$?
+
+													#Chequeo que salio todo bien
+													if [ $resultadoMoverA -eq 0 ]
+													then
+														"$graLog" "$comando" "Archivo $archAmover aceptado" INFO
+													fi
+
+												else
+													#Grabar log
+													"$graLog" "$comando" "Archivo $ARCH no tiene una fecha valida. Rechazado" WAR
+							
+												fi
+						
 											else
 												#Grabar log
-												"$graLog" "$comando" "Archivo "$ARCH" no tiene una fecha valida. Rechazado" WAR
+												"$graLog" "$comando" "Archivo $ARCH no tiene una fecha valida. Rechazado" WAR
 							
 											fi
-						
-										else
-											#Grabar log
-											"$graLog" "$comando" "Archivo "$ARCH" no tiene una fecha valida. Rechazado" WAR
-							
-										fi
 					
+										else
+
+											#Grabar log
+											"$graLog" "$comando" "Archivo $ARCH no tiene una fecha valida. Rechazado" WAR
+
+										fi
+				
 									else
 
 										#Grabar log
-										"$graLog" "$comando" "Archivo "$ARCH" no tiene una fecha valida. Rechazado" WAR
+										"$graLog" "$comando" "Archivo $ARCH no tiene un codigo de central valido. Rechazado" WAR
 
 									fi
-				
-								else
 
+								else								
 									#Grabar log
-									"$graLog" "$comando" "Archivo "$ARCH" no tiene un codigo de central valido. Rechazado" WAR
-
+									"$graLog" "$comando" "Archivo $ARCH no tiene un nombre valido. Rechazado" WAR
 								fi
 		
 							else
 
 								#Grabar log
-								"$graLog" "$comando" "Archivo "$ARCH" no tiene un nombre valido. Rechazado" WAR
-
+								"$graLog" "$comando" "Archivo $ARCH no tiene un nombre valido. Rechazado" WAR
 							fi
 						
 						else
@@ -250,12 +260,12 @@ do
 									if [ "$esTexto" -eq 0 ]	
 									then
 										#Grabar log
-										"$graLog" "$comando" "Archivo "$ARCH" no es un tipo valido. Rechazado" WAR
+										"$graLog" "$comando" "Archivo $ARCH no es un tipo valido. Rechazado" WAR
 									fi
 
 								else
 								#Grabar log
-								"$graLog" "$comando" "Archivo "$ARCH" esta vacio. Rechazado" WAR
+								"$graLog" "$comando" "Archivo $ARCH esta vacio. Rechazado" WAR
 							fi
 
 						fi

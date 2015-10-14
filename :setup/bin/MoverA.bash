@@ -122,7 +122,7 @@ then
 											#Loguear todo ok si hay comando
 											if [ "$hayComando" -eq 1 ]
 											then
-												"$graLogMoverA" "$comandoMoverA" "Archivo "$archivoSolo" movido de: "$origen" a: "$destinoDuplicado""
+												"$graLogMoverA" "$comandoMoverA" "Archivo $archivoSolo movido de: $origen a: $destinoDuplicado"
 											else
 												echo "MoverA: Archivo "$archivoSolo" movido de: "$origen" a: "$destinoDuplicado""
 											fi
@@ -136,7 +136,7 @@ then
 											#Loguear que algo salio mal
 											if [ "$hayComando" -eq 1 ]
 											then
-												"$graLogMoverA" "$comandoMoverA" "No se pudo mover "$archivoSolo"" "ERR"
+												"$graLogMoverA" "$comandoMoverA" "No se pudo mover $archivoSolo" "ERR"
 											else					
 												echo "MoverA: No se pudo mover "$archivoSolo""
 											fi
@@ -151,7 +151,7 @@ then
 											#Loguear todo ok si hay comando
 											if [ "$hayComando" -eq 1 ]
 											then
-												"$graLogMoverA" "$comandoMoverA" "Archivo "$archivoSolo" movido de: "$origen" a: "$destinoDuplicado""
+												"$graLogMoverA" "$comandoMoverA" "Archivo $archivoSolo movido de: $origen a: $destinoDuplicado"
 											else
 												echo "MoverA: Archivo "$archivoSolo" movido de: "$origen" a: "$destinoDuplicado""
 											fi
@@ -160,7 +160,7 @@ then
 											#Loguear que algo salio mal
 											if [ "$hayComando" -eq 1 ]
 											then
-												"$graLogMoverA" "$comandoMoverA" "No se pudo mover "$archivoSolo"" "ERR"
+												"$graLogMoverA" "$comandoMoverA" "No se pudo mover $archivoSolo" "ERR"
 											else
 												echo "MoverA: No se pudo mover "$archivoSolo""
 											fi
@@ -177,7 +177,7 @@ then
 										#Loguear todo ok si hay comando
 										if [ "$hayComando" -eq 1 ]
 										then
-											"$graLogMoverA" "$comandoMoverA" "Archivo "$archivoSolo" movido de: "$origen" a: "$destinoDuplicado""
+											"$graLogMoverA" "$comandoMoverA" "Archivo $archivoSolo movido de: $origen a: $destinoDuplicado"
 										else
 											echo "MoverA: Archivo "$archivoSolo" movido de: "$origen" a: "$destinoDuplicado""
 										fi
@@ -186,7 +186,7 @@ then
 										#Loguear que algo salio mal
 										if [ "$hayComando" -eq 1 ]
 										then
-											"$graLogMoverA" "$comandoMoverA" "No se pudo mover "$archivoSolo"" "ERR"
+											"$graLogMoverA" "$comandoMoverA" "No se pudo mover $archivoSolo" "ERR"
 										else
 											echo "MoverA: No se pudo mover "$archivoSolo""							
 										fi
@@ -204,7 +204,7 @@ then
 									#Loguear todo ok si hay comando
 									if [ "$hayComando" -eq 1 ]
 									then
-										"$graLogMoverA" "$comandoMoverA" "Archivo "$archivoSolo" movido de: "$origen" a: "$destino""
+										"$graLogMoverA" "$comandoMoverA" "Archivo $archivoSolo movido de: $origen a: $destino"
 									else
 										echo "MoverA: Archivo "$archivoSolo" movido de: "$origen" a: "$destino""
 									fi
@@ -214,7 +214,7 @@ then
 									#Loguear que algo salio mal
 									if [ "$hayComando" -eq 1 ]
 									then
-										"$graLogMoverA" "$comandoMoverA" "No se pudo mover "$archivoSolo"" "ERR"
+										"$graLogMoverA" "$comandoMoverA" "No se pudo mover $archivoSolo" "ERR"
 									else
 										echo "MoverA: No se pudo mover "$archivoSolo""
 									fi
@@ -229,7 +229,7 @@ then
 							#Loguear destinos iguales
 							if [ "$hayComando" -eq 1 ]
 							then
-								"$graLogMoverA" "$comandoMoverA" "No se puede mover "$archivoSolo" porque el origen y el destino son iguales" "ERR"
+								"$graLogMoverA" "$comandoMoverA" "No se puede mover $archivoSolo porque el origen y el destino son iguales" "ERR"
 							else
 								echo "MoverA: No se puede mover "$archivoSolo" porque el origen y el destino son iguales"
 							fi
@@ -240,7 +240,7 @@ then
 						#Loguear no existe el destino
 						if [ "$hayComando" -eq 1 ]
 						then
-							"$graLogMoverA" "$comandoMoverA" "No se puede mover "$archivoSolo" porque no existe el destino" "ERR"
+							"$graLogMoverA" "$comandoMoverA" "No se puede mover $archivoSolo porque no existe el destino" "ERR"
 						else
 							echo "MoverA: No se puede mover "$archivoSolo" porque no existe el destino"			
 						fi
@@ -251,7 +251,7 @@ then
 					#Loguear no existe el archivo
 					if [ "$hayComando" -eq 1 ]
 					then
-						"$graLogMoverA" "$comandoMoverA" "No se puede mover "$archivoSolo" porque el archivo no existe" "ERR"
+						"$graLogMoverA" "$comandoMoverA" "No se puede mover $archivoSolo porque el archivo no existe" "ERR"
 					else
 						echo "MoverA: No se puede mover "$archivoSolo" porque el archivo no existe"
 					fi
@@ -261,7 +261,7 @@ then
 				#Loguear no existe el origen
 				if [ "$hayComando" -eq 1 ]
 				then
-					"$graLogMoverA" "$comandoMoverA" "No se puede mover "$archivoSolo" porque no existe el origen" ERR
+					"$graLogMoverA" "$comandoMoverA" "No se puede mover $archivoSolo porque no existe el origen" ERR
 				else
 					echo "MoverA: No se puede mover "$archivoSolo" porque no existe el origen"
 				fi

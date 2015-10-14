@@ -83,7 +83,7 @@ then
 					then
 		
 						comandoGraLog=$(echo ${funcionInvoca%.bash})
-						"$logArrancar" "$funcionInvoca" "No se puede arrancar "$funcionParametro" porque no existe" "ERR"
+						"$logArrancar" "$funcionInvoca" "No se puede arrancar $funcionParametro porque no existe" "ERR"
 					else
 						echo "Arrancar: No se puede arrancar "$funcionParametro" porque no existe"
 					fi
@@ -102,7 +102,7 @@ then
 				if [ "$hayFuncion" -eq 1 ]
 				then			
 					comandoGraLog=$(echo ${funcionInvoca%.bash})
-					"$logArrancar" "$funcionInvoca" "No se puede arrancar "$funcionParametro" porque ya esta en ejecucion" "ERR"
+					"$logArrancar" "$funcionInvoca" "No se puede arrancar $funcionParametro porque ya esta en ejecucion" "ERR"
 				else
 					echo "Arrancar: No se puede arrancar "$funcionParametro" porque ya esta en ejecucion"
 				fi
@@ -126,10 +126,10 @@ then
 
 						if [ $resultadoArrancar -eq 0 ]
 						then
-							"$logArrancar" "$funcionInvoca" ""$funcionParametro" se inicio correctamente"
+							"$logArrancar" "$funcionInvoca" "$funcionParametro se inicio correctamente"
 							exit 0
 						else
-							"$logArrancar" "$funcionInvoca" ""$funcionParametro" no se pudo iniciar" "ERR"
+							"$logArrancar" "$funcionInvoca" "$funcionParametro no se pudo iniciar" "ERR"
 							exit 1
 						fi
 
