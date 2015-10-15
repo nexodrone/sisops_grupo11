@@ -94,6 +94,7 @@ do
 											#Chequeo mes y sus dias
 											mesFecha=$(echo "$fecha" | cut -c 5,6)
 											diasFecha=$(echo "$fecha" | cut -c 7,8)
+											anioFecha=$(echo "$fecha" | cut -c 1-4)
 					
 											#Meses con 31 dias
 											if [ "$mesFecha" -eq 1 ] || [ "$mesFecha" -eq 3 ] || [ "$mesFecha" -eq 5 ] || [ "$mesFecha" -eq 7 ] || [ "$mesFecha" -eq 8 ] || [ "$mesFecha" -eq 10 ] || [ "$mesFecha" -eq 12 ]
@@ -114,9 +115,45 @@ do
 											fi
 						
 											#Febrero
-											if [ "$mesFecha" -eq 2 ] && [ "$diasFecha" -ge 1 ] && [ "$diasFecha" -le 28 ]
+											if [ "$mesFecha" -eq 2 ] && [ "$diasFecha" -ge 1 ] && [ "$diasFecha" -le 29 ]
 											then
-												esValido=1
+
+												#Anio bisiesto
+												if [ "$diasFecha" -eq 29 ]
+												then
+													
+													#Chequeo anio bisiesto actual
+													let validarAnioUno=$anioActual%4
+													let validarAnioDos=$anioActual%100
+													if [ "$validarAnioUno" -eq 0 ] && [ "$validarAnioDos" -ne 0 ]
+													then
+														esValido=1
+													else
+														let validarAnioUno=$anioActual%400
+														if [ "$validarAnioUno" -eq 0 ]
+														then
+															esValido=1
+														fi
+													fi
+
+													#Chequeo anio bisiesto de la fecha
+													let validarAnioUno=$anioFecha%4
+													let validarAnioDos=$anioFecha%100
+													if [ "$validarAnioUno" -eq 0 ] && [ "$validarAnioDos" -ne 0 ]
+													then
+														esValido=1
+													else
+														let validarAnioUno=$anioFecha%400
+														if [ "$validarAnioUno" -eq 0 ]
+														then
+															esValido=1
+														fi
+													fi
+
+												else
+													esValido=1
+												fi
+					
 											fi
 							
 											#Si estuvo todo en orden

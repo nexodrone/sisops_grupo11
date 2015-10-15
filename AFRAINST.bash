@@ -2,13 +2,14 @@
 
 ajustarDirectorio() {
 # Rutina para elimar caracteres prohibidos
-var=$( tr -dc '[a-z][A-Z][0-9]-_ /' <<< "$var" )
-var=$( sed "s_\^__g" <<< "$var" )
-var=$( sed "s_//*_/_g" <<< "$var" )
-var=$( sed -e "s_[[:blank:]][[:blank:]]*_ _g" <<< "$var" )
-var=$( sed -e "s_[[:blank:]]*/_/_g" <<< "$var" )
-var=$( sed -e "s_/[[:blank:]]*_/_g" <<< "$var" )
-var=$( sed -e "s_/[[:blank:]]*/_/_g" <<< "$var" )
+	var=$( tr -dc '[a-z][A-Z][0-9]-_ /' <<< "$var" )
+	var=$( sed "s_\^__g" <<< "$var" )
+	var=$( sed -e "s_[[:blank:]][[:blank:]]*_ _g" <<< "$var" )
+	var=$( sed -e "s_[[:blank:]]*/_/_g" <<< "$var" )
+	var=$( sed -e "s_/[[:blank:]]*_/_g" <<< "$var" )
+	var=$( sed -e "s_/[[:blank:]]*/_/_g" <<< "$var" )
+	var=$( sed "s_//*_/_g" <<< "$var" )
+	var=$( sed 's_/$__g' <<< "$var" )
 }
 
 chequearSetup() {
@@ -512,7 +513,7 @@ setearInstalacion() {
 	echo "Defina el directorio de ejecutables ($memo):"
 	echo -e "$( date +%d/%m/%Y_%T )-$USER-AFRAINST-INFO-Defina el directorio de ejecutables ($memo):\n" >> "$CONFDIR/AFRAINST.log"
 	echo -e "\e[2mSe tomaran solo caracteres alfanumericos, _, -, /, espacio.\e[0m"	
-	read var
+	read -i "$memo" -e var
 	ajustarDirectorio
 	simbolo1=$( sed "s-\(^.\)\(.*$\)-\1-" <<< $var )
 	if [ "$simbolo1" == "/" ]
@@ -525,7 +526,7 @@ setearInstalacion() {
 	echo "Defina el directorio de maestros y tablas ($memo):"
 	echo -e "$( date +%d/%m/%Y_%T )-$USER-AFRAINST-INFO-Defina el directorio de maestros y tablas ($memo):\n" >> "$CONFDIR/AFRAINST.log"
 	echo -e "\e[2mSe tomaran solo caracteres alfanumericos, _, -, /, espacio.\e[0m"
-	read var
+	read -i "$memo" -e var
 	ajustarDirectorio
 	simbolo1=$( sed "s-\(^.\)\(.*$\)-\1-" <<< $var )
 	if [ "$simbolo1" == "/" ]
@@ -538,7 +539,7 @@ setearInstalacion() {
 	echo "Defina el directorio de recepcion de archivos de llamadas ($memo):"
 	echo -e "$( date +%d/%m/%Y_%T )-$USER-AFRAINST-INFO-Defina el directorio de recepcion de archivos de llamadas ($memo):\n" >> "$CONFDIR/AFRAINST.log"
 	echo -e "\e[2mSe tomaran solo caracteres alfanumericos, _, -, /, espacio.\e[0m"
-	read var
+	read -i "$memo" -e var
 	ajustarDirectorio
 	simbolo1=$( sed "s-\(^.\)\(.*$\)-\1-" <<< $var )
 	if [ "$simbolo1" == "/" ]
@@ -556,7 +557,7 @@ setearInstalacion() {
 	var=$(( $espacio_limite_mb+1 ))
 	while [ $var -gt $espacio_limite_mb ] || [ "$var" -le 0 ]; do
 		echo -e "\e[2mHay que ingresar numero positivo decimal <= $espacio_limite_mb\e[0m"
-		read var
+		read -i "$DATASIZE" -e var
 		if ! [[ $var == +([0-9]) ]]
 		then	var=0
 		fi
@@ -572,7 +573,7 @@ setearInstalacion() {
 	echo "Defina el directorio de archivos de llamadas aceptadas ($memo):"
 	echo -e "$( date +%d/%m/%Y_%T )-$USER-AFRAINST-INFO-Defina el directorio de archivos de llamadas aceptadas ($memo):\n" >> "$CONFDIR/AFRAINST.log"
 	echo -e "\e[2mSe tomaran solo caracteres alfanumericos, _, -, /, espacio.\e[0m"
-	read var
+	read -i "$memo" -e var
 	ajustarDirectorio
 	simbolo1=$( sed "s-\(^.\)\(.*$\)-\1-" <<< $var )
 	if [ "$simbolo1" == "/" ]
@@ -585,7 +586,7 @@ setearInstalacion() {
 	echo "Defina el directorio de archivos de llamadas sospechosas ($memo):"
 	echo -e "$( date +%d/%m/%Y_%T )-$USER-AFRAINST-INFO-Defina el directorio de archivos de llamadas sospechosas ($memo):\n" >> "$CONFDIR/AFRAINST.log"
 	echo -e "\e[2mSe tomaran solo caracteres alfanumericos, _, -, /, espacio.\e[0m"
-	read var
+	read -i "$memo" -e var
 	ajustarDirectorio
 	simbolo1=$( sed "s-\(^.\)\(.*$\)-\1-" <<< $var )
 	if [ "$simbolo1" == "/" ]
@@ -598,7 +599,7 @@ setearInstalacion() {
 	echo "Defina el directorio de reportes de llamadas ($memo):"
 	echo -e "$( date +%d/%m/%Y_%T )-$USER-AFRAINST-INFO-Defina el directorio de reportes de llamadas ($memo):\n" >> "$CONFDIR/AFRAINST.log"
 	echo -e "\e[2mSe tomaran solo caracteres alfanumericos, _, -, /, espacio.\e[0m"
-	read var
+	read -i "$memo" -e var
 	ajustarDirectorio
 	simbolo1=$( sed "s-\(^.\)\(.*$\)-\1-" <<< $var )
 	if [ "$simbolo1" == "/" ]
@@ -611,7 +612,7 @@ setearInstalacion() {
 	echo "Defina el directorio de archivos de log ($memo):"
 	echo -e "$( date +%d/%m/%Y_%T )-$USER-AFRAINST-INFO-Defina el directorio de archivos de log ($memo):\n" >> "$CONFDIR/AFRAINST.log"
 	echo -e "\e[2mSe tomaran solo caracteres alfanumericos, _, -, /, espacio.\e[0m"
-	read var
+	read -i "$memo" -e var
 	ajustarDirectorio
 	simbolo1=$( sed "s-\(^.\)\(.*$\)-\1-" <<< $var )
 	if [ "$simbolo1" == "/" ]
@@ -623,7 +624,7 @@ setearInstalacion() {
 	echo "Defina la extencion de archivos de log ($LOGEXT):"
 	echo -e "$( date +%d/%m/%Y_%T )-$USER-AFRAINST-INFO-Defina la extencion de archivos de log ($LOGEXT):\n" >> "$CONFDIR/AFRAINST.log"
 	echo -e "\e[2mSe tomaran hasta 5 primeros caracteres\e[0m"
-	read var
+	read -i "$LOGEXT" -e var
 	if [ -z "$var" ]
 	then	LOGEXT=""
 	else
@@ -642,7 +643,7 @@ setearInstalacion() {
 	var=0
 	while [ $var -gt $espacio_limite_kb ] || [ $var -le 0 ]; do
 		echo -e "\e[2mHay que ingresar numero positivo decimal <= $espacio_limite_kb\e[0m"
-		read var
+		read -i "$LOGSIZE" -e var
 		if ! [[ $var == +([0-9]) ]]
 		then	var=0
 		fi
@@ -658,7 +659,7 @@ setearInstalacion() {
 	echo "Defina el directorio de archivos rechazados ($memo):"
 	echo -e "$( date +%d/%m/%Y_%T )-$USER-AFRAINST-INFO-Defina el directorio de archivos rechazados ($memo):\n" >> "$CONFDIR/AFRAINST.log"
 	echo -e "\e[2mSe tomaran solo caracteres alfanumericos, _, -, /, espacio.\e[0m"
-	read var
+	read -i "$memo" -e var
 	ajustarDirectorio
 	simbolo1=$( sed "s-\(^.\)\(.*$\)-\1-" <<< $var )
 	if [ "$simbolo1" == "/" ]
