@@ -2,13 +2,14 @@
 
 ajustarDirectorio() {
 # Rutina para elimar caracteres prohibidos
-var=$( tr -dc '[a-z][A-Z][0-9]-_ /' <<< "$var" )
-var=$( sed "s_\^__g" <<< "$var" )
-var=$( sed "s_//*_/_g" <<< "$var" )
-var=$( sed -e "s_[[:blank:]][[:blank:]]*_ _g" <<< "$var" )
-var=$( sed -e "s_[[:blank:]]*/_/_g" <<< "$var" )
-var=$( sed -e "s_/[[:blank:]]*_/_g" <<< "$var" )
-var=$( sed -e "s_/[[:blank:]]*/_/_g" <<< "$var" )
+	var=$( tr -dc '[a-z][A-Z][0-9]-_ /' <<< "$var" )
+	var=$( sed "s_\^__g" <<< "$var" )
+	var=$( sed -e "s_[[:blank:]][[:blank:]]*_ _g" <<< "$var" )
+	var=$( sed -e "s_[[:blank:]]*/_/_g" <<< "$var" )
+	var=$( sed -e "s_/[[:blank:]]*_/_g" <<< "$var" )
+	var=$( sed -e "s_/[[:blank:]]*/_/_g" <<< "$var" )
+	var=$( sed "s_//*_/_g" <<< "$var" )
+	var=$( sed 's_/$__g' <<< "$var" )
 }
 
 chequearSetup() {
@@ -519,6 +520,7 @@ setearInstalacion() {
 	then	BINDIR="$GRUPO$var"
 	else	BINDIR="$GRUPO/$var"
 	fi
+	echo $BINDIR
 	echo -e "$( date +%d/%m/%Y_%T )-$USER-AFRAINST-INFO-$BINDIR\n" >> "$CONFDIR/AFRAINST.log"
 
 	memo=$( sed "s-\(^$GRUPO\)\(.*$\)-\2-" <<< "$MAEDIR" )
@@ -532,6 +534,7 @@ setearInstalacion() {
 	then	MAEDIR="$GRUPO$var"
 	else	MAEDIR="$GRUPO/$var"
 	fi
+	echo $MAEDIR
 	echo -e "$( date +%d/%m/%Y_%T )-$USER-AFRAINST-INFO-$MAEDIR\n" >> "$CONFDIR/AFRAINST.log"
 
 	memo=$( sed "s-\(^$GRUPO\)\(.*$\)-\2-" <<< "$NOVEDIR" )
