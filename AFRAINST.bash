@@ -520,7 +520,6 @@ setearInstalacion() {
 	then	BINDIR="$GRUPO$var"
 	else	BINDIR="$GRUPO/$var"
 	fi
-	echo $BINDIR
 	echo -e "$( date +%d/%m/%Y_%T )-$USER-AFRAINST-INFO-$BINDIR\n" >> "$CONFDIR/AFRAINST.log"
 
 	memo=$( sed "s-\(^$GRUPO\)\(.*$\)-\2-" <<< "$MAEDIR" )
@@ -534,7 +533,6 @@ setearInstalacion() {
 	then	MAEDIR="$GRUPO$var"
 	else	MAEDIR="$GRUPO/$var"
 	fi
-	echo $MAEDIR
 	echo -e "$( date +%d/%m/%Y_%T )-$USER-AFRAINST-INFO-$MAEDIR\n" >> "$CONFDIR/AFRAINST.log"
 
 	memo=$( sed "s-\(^$GRUPO\)\(.*$\)-\2-" <<< "$NOVEDIR" )
