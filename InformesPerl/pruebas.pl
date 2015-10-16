@@ -1,6 +1,14 @@
 #!/usr/bin/perl -w
 
+
 #opcion -r
+
+
+#HABRIA QUE HACER LAS SUBRUTINAS
+#comprobarCentrales($centrales) que a partir de una variable con las centrales separadas por comas ej: BEL,COS
+#devuelva 0 si es correcta la variable por ejemplo si fuese laskdjflksdjf,BEL no seria correcta
+#habria que chequear que cada una pertenezca al archivo de centrales ( el archivo maestro )
+#lo mismo para umbrales y los demas filtros.
 
 
 
@@ -285,24 +293,6 @@ sub filtrosParaRegistros
 
 
 
-sub filtrarLlamadasSospechosas{
-
-	
-	my ($oficinas,$fechas,@filtrosRegistros) = @_;
-	
-	my $dir = $ENV{"PROCDIR"}."/";
-	opendir(DIR,"$dir");
-	@FILES = readdir(DIR);
-
-	foreach $file (@FILES){
-
-		
-
-	}
-
-
-
-}
 
 
 
@@ -488,4 +478,103 @@ sub obtenerSioNo
 
 
 
-&menuInformesPrincipal;
+#&menuInformesPrincipal;
+
+
+
+
+
+sub filtrarRegistrosDelArchivo{
+
+	$hayQueMostrarlo='0';
+
+	my ($file,@filtrosRegistros) = @_;
+
+	my ($filtroCentral,$filtroAgente,$filtroUmbral,$filtroTipoLlamada,$filtroTiempoConvers,$filtroNumeroA,$filtroNumeroB) = @filtrosRegistros;	
+
+	open(ARCH,"$file");
+
+	while ( <ARCH> ){
+		my $line = $_;
+		my ($central,$agente,$umbral,$tipoLLam,$iniLlam,$tiempo,$Aarea,$Alinea,$Barea,$Blinea,$fecha) = split(/;/,$line);
+		
+		if ( &perteneceAlFiltro($agente,$filtroAgentes) eq '0' and
+			&perteneceAlFiltro($central,$filtroCentral) eq '0' and
+			&perteneceAlFiltro($tipoLLam,$filtroTipoLlamada) eq '0' and
+			&perteneceAlFiltro($tiempo,$filtroTiempoConvers) eq '0' and
+			&perteneceAlFiltro($Aarea.$Alinea,$filtroNumeroA) eq '0' and
+			&perteneceAlFiltro($Barea.$Blinea,$filtroNumeroB) eq '0' )
+		{
+			print "$line\n";
+
+		}
+				
+	}
+
+
+}
+
+
+
+
+
+sub perteneceAlFiltro{
+	my ($valor,$filtros) = @_;
+	
+	if ( "$filtros" ne '' ){
+		@vectorFiltros = split(/,/,$filtros);
+		foreach $filtro (@vectorFiltros){
+			if ( $valor eq $filtro ){
+				return 0;			
+			}
+		}
+		return 1;
+	}
+	return 0;
+
+}
+
+
+
+
+sub filtrarLlamadasSospechosas{
+
+	
+	my ($oficinas,$fechas,@filtrosRegistros) = @_;
+	
+	my $dir = $ENV{"PROCDIR"}."/";
+	opendir(DIR,"$dir");
+	@FILES = readdir(DIR);
+
+	foreach $file (@FILES){
+		
+		if ( $file ne 'proc' and $file ne '.' and $file ne '..'){
+			my ($oficina,$fecha) = split(/_/,$file);
+			
+			#filtrar por oficinas y por fechas
+			if ( &perteneceAlFiltro($oficina,$oficinas) eq '0' and &perteneceAlFiltro($fecha,$fechas) eq '0'){
+
+				#filtros de retgistros
+				&filtrarRegistrosDelArchivo($dir.$file,@filtrosRegistros);
+
+			}
+		
+			
+			
+		}	
+
+	}
+
+
+
+}
+
+
+
+
+#Pruebas
+
+my @filtros = ('','','','','','','');
+
+&filtrarLlamadasSospechosas("BEL","201507",@filtros)
+
