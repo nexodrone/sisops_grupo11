@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#! /usr/bin/env perl
 
 
 #opcion -r
@@ -54,7 +54,7 @@ sub menuInformesPrincipal
 
 sub llamadasSospechosas
 {
-	print "Usted escogio la opcion de realizar consultas sobre archivos de llamadas sospechosas \ņ \n";
+	print "Usted escogio la opcion de realizar consultas sobre archivos de llamadas sospechosas \n \n";
 	#RECOPILACION DE DATOS POR ENTRADA ESTANDAR
 
 	#OFICINAS----------------------------------------------------------------
@@ -478,7 +478,7 @@ sub obtenerSioNo
 
 
 
-#&menuInformesPrincipal;
+&menuInformesPrincipal;
 
 
 
