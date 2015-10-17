@@ -63,7 +63,7 @@ sub llamadasSospechosas
 	print "Para esto escriba los nombres de las oficinas separadas por , \n";
 	print "Por ejemplo:\n";
 	print "OFICINA1,OFICINA2,OFICINA3,OFICINA4\n";
-	print "Si desea realizar la consulta para todas las oficinas ingrese: TODAS\n";
+	print "Si desea realizar la consulta para todas las oficinas no ingrese ninguna\n";
 	
 	my $input = '';
 
@@ -103,7 +103,7 @@ sub llamadasSospechosas
 	@filtrosRegistros = &filtrosParaRegistros;
 
 	
-	&filtrarLlamadasSospechoss($oficinas,$fechas,@filtrosRegistros);
+	&filtrarLlamadasSospechosas($oficinas,$fechas,@filtrosRegistros);
 	
 }
 
@@ -115,16 +115,6 @@ sub llamadasSospechosas
 
 
 
-
-
-
-sub comprobarCentrales{
-	my ($centrales) = @_;
-	if ( $centrales eq '' ){return 1;}
-	return 0;
-		
-	
-}
 
 
 
@@ -176,7 +166,7 @@ sub filtrosParaRegistros
 	$respuesta = &obtenerSioNo;
 	if ( $respuesta eq '0' ){
 		$filtros = '';
-		while( &comprobarCentrales($filtros) ne '0' ){
+		while( &comprobarAgentes($filtros) ne '0' ){
 			print "Filtro Agentes\n";
 			$filtros = &obtenerFiltros;
 			if ( "$filtros" eq '-h' ) {
@@ -194,7 +184,7 @@ sub filtrosParaRegistros
 	$respuesta = &obtenerSioNo;
 	if ( $respuesta eq '0' ){
 		$filtros = '';
-		while( &comprobarCentrales($filtros) ne '0' ){
+		while( &comprobarUmbrales($filtros) ne '0' ){
 			$filtros = &obtenerFiltros;
 			if ( "$filtros" eq '-h' ) {
 				&mostrarUmbrales;			
@@ -212,7 +202,7 @@ sub filtrosParaRegistros
 	$respuesta = &obtenerSioNo;
 	if ( $respuesta eq '0' ){
 		$filtros = '';
-		while( &comprobarCentrales($filtros) ne '0' ){
+		while( &comprobarTipoLlamada($filtros) ne '0' ){
 			$filtros = &obtenerFiltros;
 			if ( "$filtros" eq '-h' ) {
 				&mostrarTipoLlamadas;			
@@ -230,7 +220,7 @@ sub filtrosParaRegistros
 	$respuesta = &obtenerSioNo;
 	if ( $respuesta eq '0' ){
 		$filtros = '';
-		while( &comprobarCentrales($filtros) ne '0' ){
+		while( &comprobarTiempoDeConversacion($filtros) ne '0' ){
 			$filtros = &obtenerFiltros;
 			if ( "$filtros" eq '-h' ) {
 				&mostrarTiempoConversacion;			
@@ -247,7 +237,7 @@ sub filtrosParaRegistros
 	$respuesta = &obtenerSioNo;
 	if ( $respuesta eq '0' ){
 		$filtros = '';
-		while( &comprobarCentrales($filtros) ne '0' ){
+		while( &comprobarNumeroA($filtros) ne '0' ){
 			$filtros = &obtenerFiltros;
 			if ( "$filtros" eq '-h' ) {
 				&mostrarNumeroA;			
@@ -262,7 +252,7 @@ sub filtrosParaRegistros
 	$respuesta = &obtenerSioNo;
 	if ( $respuesta eq '0' ){
 		$filtros = '';
-		while( &comprobarCentrales($filtros) ne '0' ){
+		while( &comprobarNumeroB($filtros) ne '0' ){
 			$filtros = &obtenerFiltros;
 			if ( "$filtros" eq '-h' ) {
 				&mostrarNumeroB;			
@@ -305,6 +295,14 @@ sub filtrosParaRegistros
 #-------------------------------------------------------------------
 
 
+
+
+
+
+
+
+
+#-------------------------------------------------------------------------------------------
 
 sub mostrarCentrales{
 	print "\n";
@@ -400,7 +398,7 @@ sub mostrarNumeroB{
 	open(ARCH,$arch);
 	while(<ARCH>){
 		chomp;
-		print "@_\n";
+		print "$_\n";
 	}
 	print "\n";
 
@@ -416,8 +414,8 @@ sub mostrarNumeroB{
 sub comprobarOficinas
 {
 	my ($oficinas) = @_;
-	if ( $oficinas eq '0'){ return 0;}
-	else{ return 1; }
+	if ( $oficinas eq ""){ return 1;}
+	else{ return 0; }
 
 }
 
@@ -425,9 +423,91 @@ sub comprobarOficinas
 sub comprobarFecha
 {
 	my ($entrada) = @_;
-	if ( $entrada eq '0' ) { return 0; }
-	return 1;
+	if ( $entrada eq '' ) { return 1; }
+	return 0;
 	
+
+}
+
+
+sub comprobarCentrales{
+	my ($valor) = @_;
+	
+	$arch = $ENV{"MAEDIR"}."/CdC.mae";
+	$pos = 0;
+	if ( &comprobarValorEnElArchivo($valor,$arch,$pos) eq '0' ){return 0;}
+	return 1;	
+	
+}
+
+sub comprobarAgentes{
+	my ($valor) = @_;
+	
+	$arch = $ENV{"MAEDIR"}."/agentes.mae";
+	$pos = 2;
+	if ( &comprobarValorEnElArchivo($valor,$arch,$pos) eq '0' ){return 0;}
+	return 1;	
+
+}
+
+
+sub comprobarUmbrales{
+	my ($valor) = @_;
+	
+	$arch = $ENV{"MAEDIR"}."/umbral.tab";
+
+	$pos = 0;
+	if ( &comprobarValorEnElArchivo($valor,$arch,$pos) eq '0' ){return 0;}
+	return 1;
+}
+
+
+sub comprobarTipoLlamada{
+	my ($valor) = @_;
+	$arch = $ENV{"MAEDIR"}."/tllama.tab";
+	$pos = 1;
+
+	if ( &comprobarValorEnElArchivo($valor,$arch,$pos) eq '0' ){return 0;}
+	return 1;
+
+}
+
+
+sub comprobarNumeroA{
+	my ($valor) = @_;
+	$arch = $ENV{"MAEDIR"}."/tllama.mae";
+	$pos = 0;
+	if ( &comprobarValorEnElArchivo($valor,$arch,$pos) eq '0' ){return 0;}
+	return 1;
+
+
+}
+
+
+sub comprobarNumeroB{
+	my ($valor) = @_;
+	my $arch = $ENV{"MAEDIR"}."/CdP.mae";
+	my $pos = 0;
+	if ( &comprobarValorEnElArchivo($valor,$arch,$pos) eq '0' ){return 0;}
+	return 1;
+}
+
+
+sub comprobarValorEnElArchivo{
+
+	my ($valor,$arch,$pos) = @_;
+	my @VALS = split(/,/,$valor);
+	print "ARCHIVO $arch\n";
+	open(ARCH,$arch);
+	while(<ARCH>){
+		chomp;
+		@tokens = split(/;/,$_);
+		print "string".$tokens[$pos]."\n";
+		foreach $item (@VALS){
+			if( "$valor" eq $tokens[$pos] ){return 0;}
+		}
+	}
+	return 1;
 
 }
 
@@ -496,14 +576,15 @@ sub filtrarRegistrosDelArchivo{
 
 	while ( <ARCH> ){
 		my $line = $_;
-		my ($central,$agente,$umbral,$tipoLLam,$iniLlam,$tiempo,$Aarea,$Alinea,$Barea,$Blinea,$fecha) = split(/;/,$line);
-		
-		if ( &perteneceAlFiltro($agente,$filtroAgentes) eq '0' and
+		my ($central,$agente,$umbral,$tipoLLam,$iniLlam,$tiempo,$Aarea,$Alinea,$Barea,$Blinea,$fecha) = split(/;/,$line); 
+
+		if ( &perteneceAlFiltro($agente,$filtroAgente) eq '0' and
 			&perteneceAlFiltro($central,$filtroCentral) eq '0' and
 			&perteneceAlFiltro($tipoLLam,$filtroTipoLlamada) eq '0' and
 			&perteneceAlFiltro($tiempo,$filtroTiempoConvers) eq '0' and
 			&perteneceAlFiltro($Aarea.$Alinea,$filtroNumeroA) eq '0' and
-			&perteneceAlFiltro($Barea.$Blinea,$filtroNumeroB) eq '0' )
+			&perteneceAlFiltro($Barea.$Blinea,$filtroNumeroB) eq '0' and
+			&perteneceAlFiltro($umbral,$filtroUmbral) eq '0' )
 		{
 			print "$line\n";
 
@@ -521,14 +602,16 @@ sub filtrarRegistrosDelArchivo{
 sub perteneceAlFiltro{
 	my ($valor,$filtros) = @_;
 	
-	if ( "$filtros" ne '' ){
-		@vectorFiltros = split(/,/,$filtros);
-		foreach $filtro (@vectorFiltros){
-			if ( $valor eq $filtro ){
-				return 0;			
+	if ( defined $filtros ){
+		if ( "$filtros" ne "" ){
+			@vectorFiltros = split(/,/,$filtros);
+			foreach $filtro (@vectorFiltros){
+				if ( $valor eq $filtro ){
+					return 0;			
+				}
 			}
-		}
 		return 1;
+		}
 	}
 	return 0;
 
@@ -569,12 +652,14 @@ sub filtrarLlamadasSospechosas{
 
 }
 
-
+&menuInformesPrincipal;
 
 
 #Pruebas
 
-my @filtros = ('','','','','','','');
+#($filtroCentral,$filtroAgente,$filtroUmbral,$filtroTipoLlamada,$filtroTiempoConvers,$filtroNumeroA,$filtroNumeroB)
+#my @filtros = ('','SIGNORIJAVIER','','','','','');
 
-&filtrarLlamadasSospechosas("BEL","201507",@filtros)
+#&filtrarLlamadasSospechosas("BEL","201507",@filtros)
+
 
