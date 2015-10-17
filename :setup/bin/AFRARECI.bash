@@ -43,6 +43,7 @@ do
 				for ARCH in *
 				do
 					esValido=1
+					esTexto=1
 					#Si el archivo existe y no esta vacio
 					
 					if [ -f "$ARCH" ] && [ -s "$ARCH" ]
