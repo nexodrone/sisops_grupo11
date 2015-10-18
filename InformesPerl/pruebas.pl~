@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#! /usr/bin/env perl
 
 
 #opcion -r
@@ -20,12 +20,11 @@
 
 sub menuInformesPrincipal
 {	
-	&clearScreen;
 	
 	my $input = '';
 	while ($input ne '3')
 	{
-		
+		&clearScreen;
 
 		print "Por favor ingrese la opcion deseada ( 1 , 2 o 3 ):\n";
 		print "1- Realizar consultas sobre archivos de llamadas sospechosas \n";
@@ -45,7 +44,7 @@ sub menuInformesPrincipal
 			
 	}
 	
-
+	&clearScreen;
 }
 
 
@@ -54,17 +53,22 @@ sub menuInformesPrincipal
 
 sub llamadasSospechosas
 {
-	print "Usted escogio la opcion de realizar consultas sobre archivos de llamadas sospechosas \ņ \n";
+	&clearScreen;
+	print "Usted escogio la opcion de realizar consultas sobre archivos de llamadas sospechosas \n \n";
 	#RECOPILACION DE DATOS POR ENTRADA ESTANDAR
 
 	#OFICINAS----------------------------------------------------------------
 
 	print "Por favor ingrese la o las oficinas para las cuales desea realizar la consulta\n";
+	print "\n";
 	print "Para esto escriba los nombres de las oficinas separadas por , \n";
+	print "\n";
 	print "Por ejemplo:\n";
 	print "OFICINA1,OFICINA2,OFICINA3,OFICINA4\n";
+	print "\n";
 	print "Si desea realizar la consulta para todas las oficinas no ingrese ninguna\n";
-	
+	print "\n";
+
 	my $input = '';
 
 	while ( &comprobarOficinas($input) ne '0' )
@@ -73,18 +77,25 @@ sub llamadasSospechosas
 		chomp( $input );
 	}
 
-	$oficinas= $input;
+	my $oficinas= $input;
 	
 	print "\n";	
+	
+	&clearScreen;
 
 	#FECHAS----------------------------------------------------------------
 
 	print "Por favor ingrese la o las fechas ( Anio mes: aaaamm ) para las cuales desea realizar la consulta\n";
+	print "\n";
 	print "Para esto escriba las fechas separadas por , \n";
+	print "\n";
 	print "Por ejemplo si queremos las de julio del 2015 y de enero del 2014:\n";
 	print "201507,201401\n";
+	print "\n";
 	print "Si desea realizar la consulta para todas las fechas ingrese: TODAS\n";
-	
+	print "\n";
+
+
 	$input = '';
 	
 	while ( &comprobarFecha($input) ne '0' )
@@ -93,14 +104,14 @@ sub llamadasSospechosas
 		chomp( $input );
 	}
 
-	$fechas= $input;
+	my $fechas= $input;
 
 	
 	print "\n";
 
 	
 	#Filtros-------------------------------------------------------------------
-	@filtrosRegistros = &filtrosParaRegistros;
+	my @filtrosRegistros = &filtrosParaRegistros;
 
 	
 	&filtrarLlamadasSospechosas($oficinas,$fechas,@filtrosRegistros);
@@ -121,10 +132,13 @@ sub llamadasSospechosas
 
 sub obtenerFiltros
 {
+	my ($ejemplo) = @_;
+
 	print "Por favor ingrese los filtros que desee agregar:\n";
 	print "Debe agregarlos de la siguiente manera:\n";
-	print "FILTRO1,FILTRO2,FILTRO3\n";
+	print "$ejemplo \n";
 	print "Para ver los filtros disponibles ingrese: -h\n";
+	print "Recuerde que debe ingresar al menos 1 filtro valido para continuar:\n";
 	my $filtros = <STDIN>;
 	chomp( $filtros );
 	return $filtros;
@@ -140,131 +154,140 @@ sub obtenerFiltros
 #Faltan las comprobaciones y definir un par de temas sobre los filtros
 sub filtrosParaRegistros
 {
-	
-	my $filtros = '';
-	
+	&clearScreen;
+
+	my $filtros = "";
+
+	my $filtroCentral="";
 	#CENTRALES-------------------------------------------------
 	print "Desea agregar filtros por central? S/N\n";
 	my $respuesta = &obtenerSioNo;
 	if ( $respuesta eq '0' ){
-		$filtros = '';
-		while( &comprobarCentrales($filtros) ne '0' ){
-			$filtros = &obtenerFiltros;
-			if ( "$filtros" eq '-h' ) {
+		while( &comprobarCentrales($filtroCentral) ne '0' ){
+			$filtroCentral = &obtenerFiltros("BEL,ACD,CDG");
+			if ( "$filtroCentral" eq '-h' ) {
 				&mostrarCentrales;			
 			}
 		}
-		$filtroCentral=$filtro;
 	}
-	else{my $filtroCentral = '';}	
+	else{ $filtroCentral = "";}	
 	
 
-
+	&clearScreen;
 
 	#AGENTES---------------------------------------------------------
 	print "Desea agregar filtros por agente? S/N\n";
 	$respuesta = &obtenerSioNo;
+	my $filtroAgente ="";
 	if ( $respuesta eq '0' ){
-		$filtros = '';
-		while( &comprobarAgentes($filtros) ne '0' ){
+
+		while( &comprobarAgentes($filtroAgente) ne '0' ){
 			print "Filtro Agentes\n";
-			$filtros = &obtenerFiltros;
-			if ( "$filtros" eq '-h' ) {
+			$filtroAgente = &obtenerFiltros("PEREZJORGE,SIGNORIJAVIER");
+			if ( "$filtroAgente" eq '-h' ) {
 				&mostrarAgentes;			
 			}
 		}
-		$filtroAgente=$filtro;
 	}
-	else{my $filtroAgente ='';}
+	else{$filtroAgente ="";}
 
-
+&clearScreen;
 
 	#UMBRALES----------------------------------------------------
 	print "Desea agregar filtros por umbral? S/N\n";
 	$respuesta = &obtenerSioNo;
+	my $filtroUmbral ="";
 	if ( $respuesta eq '0' ){
-		$filtros = '';
-		while( &comprobarUmbrales($filtros) ne '0' ){
-			$filtros = &obtenerFiltros;
-			if ( "$filtros" eq '-h' ) {
+
+		while( &comprobarUmbrales($filtroUmbral) ne '0' ){
+			$filtroUmbral = &obtenerFiltros("200,201,199");
+			if ( "$filtroUmbral" eq '-h' ) {
 				&mostrarUmbrales;			
 			}
 		}
 		
 	}
-	else{my $filtroUmbral ='';}
+	else{ $filtroUmbral ="";}
 
-
+&clearScreen;
 
 
 	#LLAMADAS-------------------------------------------------------
 	print "Desea agregar filtros por tipo de llamada? S/N\n";
 	$respuesta = &obtenerSioNo;
+	my $filtroTipoLlamada ="";
 	if ( $respuesta eq '0' ){
-		$filtros = '';
-		while( &comprobarTipoLlamada($filtros) ne '0' ){
-			$filtros = &obtenerFiltros;
-			if ( "$filtros" eq '-h' ) {
+
+		while( &comprobarTipoLlamada($filtroTipoLlamada) ne '0' ){
+			$filtroTipoLlamada = &obtenerFiltros("DDI,DDN,LOC");
+			if ( "$filtroTipoLlamada" eq '-h' ) {
 				&mostrarTipoLlamadas;			
 			}
 		}
 	}
-	else{my $filtroTipoLlamada ='';}
+	else{my $filtroTipoLlamada ="";}
 
 
-
+&clearScreen;
 
 
 	#TIEMPO CONVERS--------------------------------------------------
 	print "Desea agregar filtros por tiempo de conversacion? S/N\n";
 	$respuesta = &obtenerSioNo;
+	my $filtroTiempoConvers ="";
 	if ( $respuesta eq '0' ){
-		$filtros = '';
-		while( &comprobarTiempoDeConversacion($filtros) ne '0' ){
-			$filtros = &obtenerFiltros;
-			if ( "$filtros" eq '-h' ) {
+
+		while( &comprobarTiempoDeConversacion($filtroTiempoConvers) ne '0' ){
+			$filtroTiempoConvers = &obtenerFiltros("133,122,10");
+			if ( "$filtroTiempoConvers" eq '-h' ) {
 				&mostrarTiempoConversacion;			
 			}
 		}
 	}
-	else{my $filtroTiempoConvers ='';}
+	else{my $filtroTiempoConvers ="";}
 
 
-
+&clearScreen;
 
 	#NUMERO LINEA Y AREA-----------------------------------------------
 	print "Desea agregar filtros por area y numero de linea? S/N\n";
 	$respuesta = &obtenerSioNo;
+	my $filtroNumeroA ="";
 	if ( $respuesta eq '0' ){
-		$filtros = '';
-		while( &comprobarNumeroA($filtros) ne '0' ){
-			$filtros = &obtenerFiltros;
-			if ( "$filtros" eq '-h' ) {
+
+		while( &comprobarNumeroA($filtroNumeroA) ne '0' ){
+			$filtroNumeroA = &obtenerFiltros("codigo de area - numero de linea: 11-31390136,220-31490141");
+			if ( "$filtroNumeroA" eq '-h' ) {
 				&mostrarNumeroA;			
 			}
 		}
 	}
-	else{my $filtroNumeroA ='';}
+	else{ $filtroNumeroA ="";}
+
+&clearScreen;
 
 
 	#PAIS NUMERO DE LINEA-----------------------------------------------
 	print "Desea agregar filtros por pais y numero de linea? S/N\n";
 	$respuesta = &obtenerSioNo;
+	my $filtroNumeroB ="";
 	if ( $respuesta eq '0' ){
-		$filtros = '';
-		while( &comprobarNumeroB($filtros) ne '0' ){
-			$filtros = &obtenerFiltros;
-			if ( "$filtros" eq '-h' ) {
+
+		while( &comprobarNumeroB($filtroNumeroB) ne '0' ){
+			$filtroNumeroB = &obtenerFiltros("codigo de pais - numero de linea: 994-31390136,387-31490141");
+			if ( "$filtroNumeroB" eq '-h' ) {
 				&mostrarNumeroB;			
 			}
 		}
 	}
-	else{my $filtroNumeroB ='';}
+	else{ $filtroNumeroB ="";}
 
 
+&clearScreen;
 
+	
 
-	@retvalue = ($filtroCentral,$filtroAgente,$filtroUmbral,$filtroTipoLlamada,$filtroTiempoConvers,$filtroNumeroA,$filtroNumeroB);
+	my @retvalue = ($filtroCentral,$filtroAgente,$filtroUmbral,$filtroTipoLlamada,$filtroTiempoConvers,$filtroNumeroA,$filtroNumeroB);
 
 	return @retvalue;
 
@@ -411,6 +434,13 @@ sub mostrarNumeroB{
 #VALIDACIONES-------------------------------------------------------
 #-------------------------------------------------------------------
 
+
+sub comprobarTiempoDeConversacion{
+	return 0;
+
+}
+
+
 sub comprobarOficinas
 {
 	my ($oficinas) = @_;
@@ -433,8 +463,8 @@ sub comprobarFecha
 sub comprobarCentrales{
 	my ($valor) = @_;
 	
-	$arch = $ENV{"MAEDIR"}."/CdC.mae";
-	$pos = 0;
+	my $arch = $ENV{"MAEDIR"}."/CdC.mae";
+	my $pos = 0;
 	if ( &comprobarValorEnElArchivo($valor,$arch,$pos) eq '0' ){return 0;}
 	return 1;	
 	
@@ -443,8 +473,8 @@ sub comprobarCentrales{
 sub comprobarAgentes{
 	my ($valor) = @_;
 	
-	$arch = $ENV{"MAEDIR"}."/agentes.mae";
-	$pos = 2;
+	my $arch = $ENV{"MAEDIR"}."/agentes.mae";
+	my $pos = 2;
 	if ( &comprobarValorEnElArchivo($valor,$arch,$pos) eq '0' ){return 0;}
 	return 1;	
 
@@ -454,9 +484,9 @@ sub comprobarAgentes{
 sub comprobarUmbrales{
 	my ($valor) = @_;
 	
-	$arch = $ENV{"MAEDIR"}."/umbral.tab";
+	my $arch = $ENV{"MAEDIR"}."/umbral.tab";
 
-	$pos = 0;
+	my $pos = 0;
 	if ( &comprobarValorEnElArchivo($valor,$arch,$pos) eq '0' ){return 0;}
 	return 1;
 }
@@ -464,8 +494,8 @@ sub comprobarUmbrales{
 
 sub comprobarTipoLlamada{
 	my ($valor) = @_;
-	$arch = $ENV{"MAEDIR"}."/tllama.tab";
-	$pos = 1;
+	my $arch = $ENV{"MAEDIR"}."/tllama.tab";
+	my $pos = 1;
 
 	if ( &comprobarValorEnElArchivo($valor,$arch,$pos) eq '0' ){return 0;}
 	return 1;
@@ -473,11 +503,24 @@ sub comprobarTipoLlamada{
 }
 
 
+
+
 sub comprobarNumeroA{
 	my ($valor) = @_;
-	$arch = $ENV{"MAEDIR"}."/tllama.mae";
-	$pos = 0;
-	if ( &comprobarValorEnElArchivo($valor,$arch,$pos) eq '0' ){return 0;}
+	my $arch = $ENV{"MAEDIR"}."/CdA.mae";
+	my $pos = 1;
+	my $cods = "";
+	@NUMEROS = split(/,/, $valor);
+	foreach $num (@NUMEROS){
+	
+		my ($codigo,$linea) = split(/-/,$num);
+		
+		$cods = $cods.$codigo.",";
+
+	}
+	chop($cods);
+	print "$cods";
+	if ( &comprobarValorEnElArchivo($cods,$arch,$pos) eq '0' ){return 0;}
 	return 1;
 
 
@@ -488,7 +531,17 @@ sub comprobarNumeroB{
 	my ($valor) = @_;
 	my $arch = $ENV{"MAEDIR"}."/CdP.mae";
 	my $pos = 0;
-	if ( &comprobarValorEnElArchivo($valor,$arch,$pos) eq '0' ){return 0;}
+	my $cods = "";
+	my @NUMEROS = split(/,/, $valor);
+	foreach my $num (@NUMEROS){
+	
+		my ($codigo,$linea) = split(/-/,$num);
+		
+		$cods = $cods.$codigo.",";
+
+	}
+	chop($cods);
+	if ( &comprobarValorEnElArchivo($cods,$arch,$pos) eq '0' ){return 0;}
 	return 1;
 }
 
@@ -501,10 +554,9 @@ sub comprobarValorEnElArchivo{
 	open(ARCH,$arch);
 	while(<ARCH>){
 		chomp;
-		@tokens = split(/;/,$_);
-		print "string".$tokens[$pos]."\n";
-		foreach $item (@VALS){
-			if( "$valor" eq $tokens[$pos] ){return 0;}
+		my @tokens = split(/;/,$_);
+		foreach my $item (@VALS){
+			if( "$item" eq $tokens[$pos] ){return 0;}
 		}
 	}
 	return 1;
@@ -566,7 +618,7 @@ sub obtenerSioNo
 
 sub filtrarRegistrosDelArchivo{
 
-	$hayQueMostrarlo='0';
+	my $hayQueMostrarlo='0';
 
 	my ($file,@filtrosRegistros) = @_;
 
@@ -620,15 +672,50 @@ sub perteneceAlFiltro{
 
 
 
+sub imprimirFiltros{
+
+	my ($filtros,$titulo) = @_;
+
+	if ( $filtros ne "" ){
+		print "$titulo\n";
+		@FILT = split(/,/,$filtros);
+		foreach $filtro (@FILT){
+			print "$filtro\n";
+		}
+		print "\n";
+	}
+}
+
+
 sub filtrarLlamadasSospechosas{
 
-	
+	&clearScreen;
+
 	my ($oficinas,$fechas,@filtrosRegistros) = @_;
+
+
+	print "FILTROS UTILIZADOS:\n";
+	
+	
+	&imprimirFiltros($oficinas,"OFICINAS:");
+	
+	&imprimirFiltros($fechas,"FECHAS:");
+	&imprimirFiltros($filtrosRegistros[0],"CENTRALES:");
+	&imprimirFiltros($filtrosRegistros[1],"AGENTES:");
+	&imprimirFiltros($filtrosRegistros[2],"UMBRALES:");
+	&imprimirFiltros($filtrosRegistros[3],"TIPOS DE LLAMADAS:");
+	&imprimirFiltros($filtrosRegistros[4],"TIEMPO DE CONVERSACION:");
+	&imprimirFiltros($filtrosRegistros[5],"CODIGO DE AREA Y NUMERO DE LINEA:");
+	&imprimirFiltros($filtrosRegistros[6],"CODIGO DE PAIS Y NUMERO DE LINEA:");
+	
+
+	
 	
 	my $dir = $ENV{"PROCDIR"}."/";
 	opendir(DIR,"$dir");
 	@FILES = readdir(DIR);
 
+	print "REGISTROS:\n";
 	foreach $file (@FILES){
 		
 		if ( $file ne 'proc' and $file ne '.' and $file ne '..'){
@@ -648,6 +735,9 @@ sub filtrarLlamadasSospechosas{
 
 	}
 
+	print "\n";
+	print "Presione alguna tecla para volver al menu.\n";
+	my $input = <STDIN>;
 
 
 }
@@ -657,7 +747,7 @@ sub filtrarLlamadasSospechosas{
 
 #Pruebas
 
-#($filtroCentral,$filtroAgente,$filtroUmbral,$filtroTipoLlamada,$filtroTiempoConvers,$filtroNumeroA,$filtroNumeroB)
+
 #my @filtros = ('','SIGNORIJAVIER','','','','','');
 
 #&filtrarLlamadasSospechosas("BEL","201507",@filtros)
