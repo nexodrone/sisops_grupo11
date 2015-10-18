@@ -670,20 +670,6 @@ sub proximaSubllamada
 }
 
 
-#-----------------------------------------------------------------------------
-#CODIGO PRINCIPAL ------------------------------------------------------------
-#-----------------------------------------------------------------------------
-
-
-
-
-
-
-#&menuInformesPrincipal;
-
-
-
-
 
 sub filtrarRegistrosDelArchivo{
 
@@ -706,12 +692,13 @@ sub filtrarRegistrosDelArchivo{
 			&perteneceAlFiltro($Aarea.'-'.$Alinea,$filtroNumeroA) eq '0' and
 			&perteneceAlFiltro($umbral,$filtroUmbral) eq '0' )
 		{
-			
-			print "$line\n";
+			push(@registrosFiltrados,$line);
 
 		}
 				
 	}
+
+	close(ARCH);
 
 
 }
@@ -774,7 +761,7 @@ sub filtrarLlamadasSospechosas{
 	&imprimirFiltros($filtrosRegistros[5],"CODIGO DE AREA Y NUMERO DE LINEA:");
 	&imprimirFiltros($filtrosRegistros[6],"CODIGO DE PAIS Y NUMERO DE LINEA:");
 	
-
+	local (@registrosFiltrados);
 	
 	
 	my $dir = $ENV{"PROCDIR"}."/";
@@ -801,11 +788,39 @@ sub filtrarLlamadasSospechosas{
 
 	}
 
+	@registrosFiltrados = sort(@registrosFiltrados);
+	if ( $seGuarda == 1 ) {
+		my ($nroSubllamada) = &proximaSubllamada;
+		my ($archivoSubllamada) = "$ENV{REPODIR}/subllamadas.$nroSubllamada";
+		open(SUBLLAMADA,">$archivoSubllamada");
+		foreach (@registrosFiltrados) {
+			print SUBLLAMADA "$_";
+		}
+		close(SUBLLAMADA);
+		print "Se grabaron ".@registrosFiltrados." registros en \"subllamadas.$nroSubllamada\"\n";
+	} else {
+		foreach (@registrosFiltrados) {
+			print "$_\n";
+		}
+	}
+	
 	print "\n";
 	print "Presione alguna tecla para volver al menu.\n";
 	my $input = <STDIN>;
 
 
+}
+
+
+#-----------------------------------------------------------------------------
+#CODIGO PRINCIPAL ------------------------------------------------------------
+#-----------------------------------------------------------------------------
+
+local ($seGuarda);
+if ( $ARGV[0] eq "-w" ) {
+	$seGuarda = 1;
+} else {
+	$seGuarda = 0;
 }
 
 &menuInformesPrincipal;
