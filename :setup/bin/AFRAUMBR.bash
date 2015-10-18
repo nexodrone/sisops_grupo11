@@ -152,6 +152,7 @@ do
   #proceso registro si es valido
   if [ $REGVALIDO = true ]
   then
+	oficina=$(grep "$AGENTE" "$MAEDIR"/agentes.mae | cut -d";" -f4)
 	fuesospe=false
 	tieneumb=false
 	if [ $TIPOLLAMADA = "DDI" ]
@@ -175,14 +176,14 @@ do
 			let sospe++
 			fuesospe=true
 			IDUMBRAL=$(echo $UMBRAL | cut -d';' -f1)
-			echo "$CODCENTRAL;$AGENTE;$IDUMBRAL;$TIPOLLAMADA;$INICIOL;$TCONV;$CODAREA;$NUMERO;$CPAIS;$CAREAB;$NUMEROB;$FECHA"  >> "$PROCDIR"/"$CODCENTRAL"_"$FECHAANIO$FECHAMES"
+			echo "$CODCENTRAL;$AGENTE;$IDUMBRAL;$TIPOLLAMADA;$INICIOL;$TCONV;$CODAREA;$NUMERO;$CPAIS;$CAREAB;$NUMEROB;$FECHA"  >> "$PROCDIR"/"$oficina"_"$FECHAANIO$FECHAMES"
 		else
 			if [ "$UMBVTIEMPO" != "" ] && [ "$UMBVTIEMPO" -lt "$TCONV" ]
 			then
 			  fuesospe=true
 			  let sospe++
 			  IDUMBRAL=$(echo $UMBRALV | cut -d';' -f1)
-			  echo "$CODCENTRAL;$AGENTE;$IDUMBRAL;$TIPOLLAMADA;$INICIOL;$TCONV;$CODAREA;$NUMERO;$CPAIS;$CAREAB;$NUMEROB;$FECHA" >> "$PROCDIR"/"$CODCENTRAL"_"$FECHAANIO$FECHAMES"
+			  echo "$CODCENTRAL;$AGENTE;$IDUMBRAL;$TIPOLLAMADA;$INICIOL;$TCONV;$CODAREA;$NUMERO;$CPAIS;$CAREAB;$NUMEROB;$FECHA" >> "$PROCDIR"/"$oficina"_"$FECHAANIO$FECHAMES"
 			fi
 		fi
 	else
@@ -205,14 +206,14 @@ do
 			let sospe++
 			fuesospe=true
 			IDUMBRAL=$(echo $UMBRAL | cut -d';' -f1)
-			echo "$CODCENTRAL;$AGENTE;$IDUMBRAL;$TIPOLLAMADA;$INICIOL;$TCONV;$CODAREA;$NUMERO;$CPAIS;$CAREAB;$NUMEROB;$FECHA" >> "$PROCDIR"/"$CODCENTRAL"_"$FECHAANIO$FECHAMES"
+			echo "$CODCENTRAL;$AGENTE;$IDUMBRAL;$TIPOLLAMADA;$INICIOL;$TCONV;$CODAREA;$NUMERO;$CPAIS;$CAREAB;$NUMEROB;$FECHA" >> "$PROCDIR"/"$oficina"_"$FECHAANIO$FECHAMES"
 		else
 			if [ "$UMBVTIEMPO" != "" ] && [ "$UMBVTIEMPO" -lt "$TCONV" ]
 			then
 			   fuesospe=true 
 			   let sospe++
 			   IDUMBRAL=$(echo $UMBRALV | cut -d';' -f1)
-			   echo "$CODCENTRAL;$AGENTE;$IDUMBRAL;$TIPOLLAMADA;$INICIOL;$TCONV;$CODAREA;$NUMERO;$CPAIS;$CAREAB;$NUMEROB;$FECHA" >> "$PROCDIR"/"$CODCENTRAL"_"$FECHAANIO$FECHAMES"
+			   echo "$CODCENTRAL;$AGENTE;$IDUMBRAL;$TIPOLLAMADA;$INICIOL;$TCONV;$CODAREA;$NUMERO;$CPAIS;$CAREAB;$NUMEROB;$FECHA" >> "$PROCDIR"/"$oficina"_"$FECHAANIO$FECHAMES"
 			fi
 		fi		
 	fi

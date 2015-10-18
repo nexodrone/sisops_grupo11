@@ -2,7 +2,7 @@
 
 ajustarDirectorio() {
 # Rutina para elimar caracteres prohibidos
-	var=$( tr -dc '[a-z][A-Z][0-9]-_ /' <<< "$var" )
+	var=$( tr -dc '[a-z][A-Z][0-9]\-_ /' <<< "$var" )
 	var=$( sed "s_\^__g" <<< "$var" )
 	var=$( sed -e "s_[[:blank:]][[:blank:]]*_ _g" <<< "$var" )
 	var=$( sed -e "s_[[:blank:]]*/_/_g" <<< "$var" )
@@ -512,40 +512,58 @@ setearInstalacion() {
 	memo=$( sed "s-\(^$GRUPO\)\(.*$\)-\2-" <<< "$BINDIR" )
 	echo "Defina el directorio de ejecutables ($memo):"
 	echo -e "$( date +%d/%m/%Y_%T )-$USER-AFRAINST-INFO-Defina el directorio de ejecutables ($memo):\n" >> "$CONFDIR/AFRAINST.log"
-	echo -e "\e[2mSe tomaran solo caracteres alfanumericos, _, -, /, espacio.\e[0m"	
-	read -i "$memo" -e var
-	ajustarDirectorio
-	simbolo1=$( sed "s-\(^.\)\(.*$\)-\1-" <<< $var )
-	if [ "$simbolo1" == "/" ]
-	then	BINDIR="$GRUPO$var"
-	else	BINDIR="$GRUPO/$var"
-	fi
+	echo -e "\e[2mSe tomaran solo caracteres alfanumericos, _, -, /, espacio.\e[0m"
+	while true; do
+		read -i "$memo" -e var
+		ajustarDirectorio
+		simbolo1=$( sed "s-\(^.\)\(.*$\)-\1-" <<< $var )
+		if [ "$simbolo1" == "/" ]
+		then	BINDIR="$GRUPO$var"
+		else	BINDIR="$GRUPO/$var"
+		fi
+		if [ "$BINDIR" != "$GRUPO/" ] && [ "$BINDIR" != "$CONFDIR" ]
+		then break
+		else echo -e "\e[2mDirectorio ya usado. Ingrese otro.\e[0m"
+		fi
+	done
 	echo -e "$( date +%d/%m/%Y_%T )-$USER-AFRAINST-INFO-$BINDIR\n" >> "$CONFDIR/AFRAINST.log"
 
 	memo=$( sed "s-\(^$GRUPO\)\(.*$\)-\2-" <<< "$MAEDIR" )
 	echo "Defina el directorio de maestros y tablas ($memo):"
 	echo -e "$( date +%d/%m/%Y_%T )-$USER-AFRAINST-INFO-Defina el directorio de maestros y tablas ($memo):\n" >> "$CONFDIR/AFRAINST.log"
 	echo -e "\e[2mSe tomaran solo caracteres alfanumericos, _, -, /, espacio.\e[0m"
-	read -i "$memo" -e var
-	ajustarDirectorio
-	simbolo1=$( sed "s-\(^.\)\(.*$\)-\1-" <<< $var )
-	if [ "$simbolo1" == "/" ]
-	then	MAEDIR="$GRUPO$var"
-	else	MAEDIR="$GRUPO/$var"
-	fi
+	while true; do
+		read -i "$memo" -e var
+		ajustarDirectorio
+		simbolo1=$( sed "s-\(^.\)\(.*$\)-\1-" <<< $var )
+		if [ "$simbolo1" == "/" ]
+		then	MAEDIR="$GRUPO$var"
+		else	MAEDIR="$GRUPO/$var"
+		fi
+		if [ "$MAEDIR" != "$GRUPO/" ] && [ "$MAEDIR" != "$CONFDIR" ] && [ "$MAEDIR" != "$BINDIR" ]
+		then break
+		else echo -e "\e[2mDirectorio ya usado. Ingrese otro.\e[0m"
+		fi
+	done
 	echo -e "$( date +%d/%m/%Y_%T )-$USER-AFRAINST-INFO-$MAEDIR\n" >> "$CONFDIR/AFRAINST.log"
 
 	memo=$( sed "s-\(^$GRUPO\)\(.*$\)-\2-" <<< "$NOVEDIR" )
 	echo "Defina el directorio de recepcion de archivos de llamadas ($memo):"
 	echo -e "$( date +%d/%m/%Y_%T )-$USER-AFRAINST-INFO-Defina el directorio de recepcion de archivos de llamadas ($memo):\n" >> "$CONFDIR/AFRAINST.log"
 	echo -e "\e[2mSe tomaran solo caracteres alfanumericos, _, -, /, espacio.\e[0m"
-	read -i "$memo" -e var
-	ajustarDirectorio
-	simbolo1=$( sed "s-\(^.\)\(.*$\)-\1-" <<< $var )
-	if [ "$simbolo1" == "/" ]
-	then	NOVEDIR="$GRUPO$var"
-	else	NOVEDIR="$GRUPO/$var"
-	fi
+	while true; do
+		read -i "$memo" -e var
+		ajustarDirectorio
+		simbolo1=$( sed "s-\(^.\)\(.*$\)-\1-" <<< $var )
+		if [ "$simbolo1" == "/" ]
+		then	NOVEDIR="$GRUPO$var"
+		else	NOVEDIR="$GRUPO/$var"
+		fi
+		if [ "$NOVEDIR" != "$GRUPO/" ] && [ "$NOVEDIR" != "$CONFDIR" ] && [ "$NOVEDIR" != "$BINDIR" ] && [ "$NOVEDIR" != "$MAEDIR" ]
+		then break
+		else echo -e "\e[2mDirectorio ya usado. Ingrese otro.\e[0m"
+		fi
+	done
 	echo -e "$( date +%d/%m/%Y_%T )-$USER-AFRAINST-INFO-$NOVEDIR\n" >> "$CONFDIR/AFRAINST.log"
 
 	espacio_limite_kb=$( df -h -k . | tail -1 | awk '{print $4}' )
@@ -573,52 +591,76 @@ setearInstalacion() {
 	echo "Defina el directorio de archivos de llamadas aceptadas ($memo):"
 	echo -e "$( date +%d/%m/%Y_%T )-$USER-AFRAINST-INFO-Defina el directorio de archivos de llamadas aceptadas ($memo):\n" >> "$CONFDIR/AFRAINST.log"
 	echo -e "\e[2mSe tomaran solo caracteres alfanumericos, _, -, /, espacio.\e[0m"
-	read -i "$memo" -e var
-	ajustarDirectorio
-	simbolo1=$( sed "s-\(^.\)\(.*$\)-\1-" <<< $var )
-	if [ "$simbolo1" == "/" ]
-	then	ACEPDIR="$GRUPO$var"
-	else	ACEPDIR="$GRUPO/$var"
-	fi
+	while true; do
+		read -i "$memo" -e var
+		ajustarDirectorio
+		simbolo1=$( sed "s-\(^.\)\(.*$\)-\1-" <<< $var )
+		if [ "$simbolo1" == "/" ]
+		then	ACEPDIR="$GRUPO$var"
+		else	ACEPDIR="$GRUPO/$var"
+		fi
+		if [ "$ACEPDIR" != "$GRUPO/" ] && [ "$ACEPDIR" != "$CONFDIR" ] && [ "$ACEPDIR" != "$BINDIR" ] && [ "$ACEPDIR" != "$MAEDIR" ] && [ "$ACEPDIR" != "$NOVEDIR" ]
+		then break
+		else echo -e "\e[2mDirectorio ya usado. Ingrese otro.\e[0m"
+		fi
+	done
 	echo -e "$( date +%d/%m/%Y_%T )-$USER-AFRAINST-INFO-$ACEPDIR\n" >> "$CONFDIR/AFRAINST.log"
 
 	memo=$( sed "s-\(^$GRUPO\)\(.*$\)-\2-" <<< "$PROCDIR" )
 	echo "Defina el directorio de archivos de llamadas sospechosas ($memo):"
 	echo -e "$( date +%d/%m/%Y_%T )-$USER-AFRAINST-INFO-Defina el directorio de archivos de llamadas sospechosas ($memo):\n" >> "$CONFDIR/AFRAINST.log"
 	echo -e "\e[2mSe tomaran solo caracteres alfanumericos, _, -, /, espacio.\e[0m"
-	read -i "$memo" -e var
-	ajustarDirectorio
-	simbolo1=$( sed "s-\(^.\)\(.*$\)-\1-" <<< $var )
-	if [ "$simbolo1" == "/" ]
-	then	PROCDIR="$GRUPO$var"
-	else	PROCDIR="$GRUPO/$var"
-	fi
+	while true; do
+		read -i "$memo" -e var
+		ajustarDirectorio
+		simbolo1=$( sed "s-\(^.\)\(.*$\)-\1-" <<< $var )
+		if [ "$simbolo1" == "/" ]
+		then	PROCDIR="$GRUPO$var"
+		else	PROCDIR="$GRUPO/$var"
+		fi
+		if [ "$PROCDIR" != "$GRUPO/" ] && [ "$PROCDIR" != "$CONFDIR" ] && [ "$PROCDIR" != "$BINDIR" ] && [ "$PROCDIR" != "$MAEDIR" ] && [ "$PROCDIR" != "$NOVEDIR" ] && [ "$PROCDIR" != "$ACEPDIR" ]
+		then break
+		else echo -e "\e[2mDirectorio ya usado. Ingrese otro.\e[0m"
+		fi
+	done
 	echo -e "$( date +%d/%m/%Y_%T )-$USER-AFRAINST-INFO-$PROCDIR\n" >> "$CONFDIR/AFRAINST.log"
 
 	memo=$( sed "s-\(^$GRUPO\)\(.*$\)-\2-" <<< "$REPODIR" )
 	echo "Defina el directorio de reportes de llamadas ($memo):"
 	echo -e "$( date +%d/%m/%Y_%T )-$USER-AFRAINST-INFO-Defina el directorio de reportes de llamadas ($memo):\n" >> "$CONFDIR/AFRAINST.log"
 	echo -e "\e[2mSe tomaran solo caracteres alfanumericos, _, -, /, espacio.\e[0m"
-	read -i "$memo" -e var
-	ajustarDirectorio
-	simbolo1=$( sed "s-\(^.\)\(.*$\)-\1-" <<< $var )
-	if [ "$simbolo1" == "/" ]
-	then	REPODIR="$GRUPO$var"
-	else	REPODIR="$GRUPO/$var"
-	fi
+	while true; do
+		read -i "$memo" -e var
+		ajustarDirectorio
+		simbolo1=$( sed "s-\(^.\)\(.*$\)-\1-" <<< $var )
+		if [ "$simbolo1" == "/" ]
+		then	REPODIR="$GRUPO$var"
+		else	REPODIR="$GRUPO/$var"
+		fi
+		if [ "$REPODIR" != "$GRUPO/" ] && [ "$REPODIR" != "$CONFDIR" ] && [ "$REPODIR" != "$BINDIR" ] && [ "$REPODIR" != "$MAEDIR" ] && [ "$REPODIR" != "$NOVEDIR" ] && [ "$REPODIR" != "$ACEPDIR" ] && [ "$REPODIR" != "$PROCDIR" ]
+		then break
+		else echo -e "\e[2mDirectorio ya usado. Ingrese otro.\e[0m"
+		fi
+	done
 	echo -e "$( date +%d/%m/%Y_%T )-$USER-AFRAINST-INFO-$REPODIR\n" >> "$CONFDIR/AFRAINST.log"
 
 	memo=$( sed "s-\(^$GRUPO\)\(.*$\)-\2-" <<< "$LOGDIR" )
 	echo "Defina el directorio de archivos de log ($memo):"
 	echo -e "$( date +%d/%m/%Y_%T )-$USER-AFRAINST-INFO-Defina el directorio de archivos de log ($memo):\n" >> "$CONFDIR/AFRAINST.log"
 	echo -e "\e[2mSe tomaran solo caracteres alfanumericos, _, -, /, espacio.\e[0m"
-	read -i "$memo" -e var
-	ajustarDirectorio
-	simbolo1=$( sed "s-\(^.\)\(.*$\)-\1-" <<< $var )
-	if [ "$simbolo1" == "/" ]
-	then	LOGDIR="$GRUPO$var"
-	else	LOGDIR="$GRUPO/$var"
-	fi
+	while true; do
+		read -i "$memo" -e var
+		ajustarDirectorio
+		simbolo1=$( sed "s-\(^.\)\(.*$\)-\1-" <<< $var )
+		if [ "$simbolo1" == "/" ]
+		then	LOGDIR="$GRUPO$var"
+		else	LOGDIR="$GRUPO/$var"
+		fi
+		if [ "$LOGDIR" != "$GRUPO/" ] && [ "$LOGDIR" != "$CONFDIR" ] && [ "$LOGDIR" != "$BINDIR" ] && [ "$LOGDIR" != "$MAEDIR" ] && [ "$LOGDIR" != "$NOVEDIR" ] && [ "$LOGDIR" != "$ACEPDIR" ] && [ "$LOGDIR" != "$PROCDIR" ] && [ "$LOGDIR" != "$REPODIR" ]
+		then break
+		else echo -e "\e[2mDirectorio ya usado. Ingrese otro.\e[0m"
+		fi
+	done
 	echo -e "$( date +%d/%m/%Y_%T )-$USER-AFRAINST-INFO-$LOGDIR\n" >> "$CONFDIR/AFRAINST.log"
 
 	echo "Defina la extencion de archivos de log ($LOGEXT):"
@@ -659,13 +701,19 @@ setearInstalacion() {
 	echo "Defina el directorio de archivos rechazados ($memo):"
 	echo -e "$( date +%d/%m/%Y_%T )-$USER-AFRAINST-INFO-Defina el directorio de archivos rechazados ($memo):\n" >> "$CONFDIR/AFRAINST.log"
 	echo -e "\e[2mSe tomaran solo caracteres alfanumericos, _, -, /, espacio.\e[0m"
-	read -i "$memo" -e var
-	ajustarDirectorio
-	simbolo1=$( sed "s-\(^.\)\(.*$\)-\1-" <<< $var )
-	if [ "$simbolo1" == "/" ]
-	then	RECHDIR="$GRUPO$var"
-	else	RECHDIR="$GRUPO/$var"
-	fi
+	while true; do
+		read -i "$memo" -e var
+		ajustarDirectorio
+		simbolo1=$( sed "s-\(^.\)\(.*$\)-\1-" <<< $var )
+		if [ "$simbolo1" == "/" ]
+		then	RECHDIR="$GRUPO$var"
+		else	RECHDIR="$GRUPO/$var"
+		fi
+		if [ "$RECHDIR" != "$GRUPO/" ] && [ "$RECHDIR" != "$CONFDIR" ] && [ "$RECHDIR" != "$BINDIR" ] && [ "$RECHDIR" != "$MAEDIR" ] && [ "$RECHDIR" != "$NOVEDIR" ] && [ "$RECHDIR" != "$ACEPDIR" ] && [ "$RECHDIR" != "$PROCDIR" ] && [ "$RECHDIR" != "$REPODIR" ] && [ "$RECHDIR" != "$LOGDIR" ]
+		then break
+		else echo -e "\e[2mDirectorio ya usado. Ingrese otro.\e[0m"
+		fi
+	done
 	echo -e "$( date +%d/%m/%Y_%T )-$USER-AFRAINST-INFO-$RECHDIR\n" >> "$CONFDIR/AFRAINST.log"
 
 	clear
