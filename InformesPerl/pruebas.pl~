@@ -11,6 +11,114 @@
 #lo mismo para umbrales y los demas filtros.
 
 
+#-------------------------------------------------------------------
+#INFORMACION--------------------------------------------------------
+#-------------------------------------------------------------------
+
+
+
+sub mostrarCentrales{
+	print "\n";
+	print "Centrales Posibles ; Descripcion:\n";
+	print "\n";
+	$archCentrales = $ENV{"MAEDIR"}."/CdC.mae";
+	open(CENTRALES,$archCentrales);
+	while(<CENTRALES>){
+		chomp;
+		print "$_ \n";
+	}
+	print "\n";
+}
+
+
+
+sub mostrarAgentes{
+	
+	print "\n";
+	print "Agentes Posibles:\n";
+	print "\n";
+	$archAgentes = $ENV{"MAEDIR"}."/agentes.mae";
+	open(AGENTES,$archAgentes);
+	while(<AGENTES>){
+		chomp;
+		@tokens = split(/;/,$_);
+		print "$tokens[0] \n";
+	}
+	print "\n";
+
+
+}
+
+
+sub mostrarUmbrales{
+	
+	print "\n";
+	print "Umbrales Posibles:\n";
+	print "Formato:\n";
+	print "id umbral; codigo de area de origen; numero de linea origen; tipo de llamada; codigo destino; tope; estado\n";
+	print "\n";
+	$arch = $ENV{"MAEDIR"}."/umbral.tab";
+	open(ARCH,$arch);
+	while(<ARCH>){
+		chomp;
+		print "$_ \n";
+	}
+	print "\n";
+
+
+}
+
+
+sub mostrarTipoLlamada{
+	print "\n";
+	print "Tipos de llamadas:\n";
+	print "\n";
+	$arch = $ENV{"MAEDIR"}."/tllama.mae";
+	open(ARCH,$arch);
+	while(<ARCH>){
+		chomp;
+		@tokens = split(/;/,$_);
+		print "$tokens[1] \n";
+	}
+	print "\n";
+
+}
+
+
+sub mostrarNumeroA{
+	print "\n";
+	print "Codigos de area:\n";
+	print "Recuerde que el filtro solo es el numero y no la descripcion \n";
+	print "\n";
+	$arch = $ENV{"MAEDIR"}."/CdA.mae";
+	open(ARCH,$arch);
+	while(<ARCH>){
+		chomp;
+		print "$_\n";
+	}
+	print "\n";
+
+}
+
+
+
+sub mostrarNumeroB{
+	print "\n";
+	print "Codigos de Pais:\n";
+	print "Recuerde que el filtro solo es el numero y no la descripcion \n";
+	print "\n";
+	$arch = $ENV{"MAEDIR"}."/CdP.mae";
+	open(ARCH,$arch);
+	while(<ARCH>){
+		chomp;
+		print "$_\n";
+	}
+	print "\n";
+
+}
+
+
+
 
 
 #-------------------------------------------------------------------
@@ -69,7 +177,7 @@ sub llamadasSospechosas
 	print "Si desea realizar la consulta para todas las oficinas no ingrese ninguna\n";
 	print "\n";
 
-	my $input = '';
+	my $input = '1';
 
 	while ( &comprobarOficinas($input) ne '0' )
 	{
@@ -92,11 +200,11 @@ sub llamadasSospechosas
 	print "Por ejemplo si queremos las de julio del 2015 y de enero del 2014:\n";
 	print "201507,201401\n";
 	print "\n";
-	print "Si desea realizar la consulta para todas las fechas ingrese: TODAS\n";
+	print "Si desea realizar la consulta para todas las fechas no ingrese ninguna\n";
 	print "\n";
 
 
-	$input = '';
+	$input = '1';
 	
 	while ( &comprobarFecha($input) ne '0' )
 	{
@@ -268,26 +376,26 @@ sub filtrosParaRegistros
 
 
 	#PAIS NUMERO DE LINEA-----------------------------------------------
-	print "Desea agregar filtros por pais y numero de linea? S/N\n";
-	$respuesta = &obtenerSioNo;
-	my $filtroNumeroB ="";
-	if ( $respuesta eq '0' ){
-
-		while( &comprobarNumeroB($filtroNumeroB) ne '0' ){
-			$filtroNumeroB = &obtenerFiltros("codigo de pais - numero de linea: 994-31390136,387-31490141");
-			if ( "$filtroNumeroB" eq '-h' ) {
-				&mostrarNumeroB;			
-			}
-		}
-	}
-	else{ $filtroNumeroB ="";}
+	#print "Desea agregar filtros por pais y numero de linea? S/N\n";
+	#$respuesta = &obtenerSioNo;
+	#my $filtroNumeroB ="";
+	#if ( $respuesta eq '0' ){
+	#
+	#	while( &comprobarNumeroB($filtroNumeroB) ne '0' ){
+	#		$filtroNumeroB = &obtenerFiltros("codigo de pais - numero de linea: 994-31390136,387-31490141");
+	#		if ( "$filtroNumeroB" eq '-h' ) {
+	#			&mostrarNumeroB;			
+	#		}
+	#	}
+	#}
+	#else{ $filtroNumeroB ="";}
 
 
 &clearScreen;
 
 	
 
-	my @retvalue = ($filtroCentral,$filtroAgente,$filtroUmbral,$filtroTipoLlamada,$filtroTiempoConvers,$filtroNumeroA,$filtroNumeroB);
+	my @retvalue = ($filtroCentral,$filtroAgente,$filtroUmbral,$filtroTipoLlamada,$filtroTiempoConvers,$filtroNumeroA);
 
 	return @retvalue;
 
@@ -302,150 +410,37 @@ sub filtrosParaRegistros
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-#-------------------------------------------------------------------
-#INFORMACION--------------------------------------------------------
-#-------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-#-------------------------------------------------------------------------------------------
-
-sub mostrarCentrales{
-	print "\n";
-	print "Centrales Posibles ; Descripcion:\n";
-	print "\n";
-	$archCentrales = $ENV{"MAEDIR"}."/CdC.mae";
-	open(CENTRALES,$archCentrales);
-	while(<CENTRALES>){
-		chomp;
-		print "$_ \n";
-	}
-	print "\n";
-}
-
-
-
-sub mostrarAgentes{
-	
-	print "\n";
-	print "Agentes Posibles:\n";
-	print "\n";
-	$archAgentes = $ENV{"MAEDIR"}."/agentes.mae";
-	open(AGENTES,$archAgentes);
-	while(<AGENTES>){
-		chomp;
-		@tokens = split(/;/,$_);
-		print "$tokens[0] \n";
-	}
-	print "\n";
-
-
-}
-
-
-sub mostrarUmbrales{
-	
-	print "\n";
-	print "Umbrales Posibles:\n";
-	print "Formato:\n";
-	print "id umbral; codigo de area de origen; numero de linea origen; tipo de llamada; codigo destino; tope; estado\n";
-	print "\n";
-	$arch = $ENV{"MAEDIR"}."/umbral.tab";
-	open(ARCH,$arch);
-	while(<ARCH>){
-		chomp;
-		print "$_ \n";
-	}
-	print "\n";
-
-
-}
-
-
-sub mostrarTipoLlamada{
-	print "\n";
-	print "Tipos de llamadas:\n";
-	print "\n";
-	$arch = $ENV{"MAEDIR"}."/tllama.mae";
-	open(ARCH,$arch);
-	while(<ARCH>){
-		chomp;
-		@tokens = split(/;/,$_);
-		print "$tokens[1] \n";
-	}
-	print "\n";
-
-}
-
-
-sub mostrarNumeroA{
-	print "\n";
-	print "Codigos de area:\n";
-	print "Recuerde que el filtro solo es el numero y no la descripcion \n";
-	print "\n";
-	$arch = $ENV{"MAEDIR"}."/CdA.mae";
-	open(ARCH,$arch);
-	while(<ARCH>){
-		chomp;
-		print "$_\n";
-	}
-	print "\n";
-
-}
-
-
-
-sub mostrarNumeroB{
-	print "\n";
-	print "Codigos de Pais:\n";
-	print "Recuerde que el filtro solo es el numero y no la descripcion \n";
-	print "\n";
-	$arch = $ENV{"MAEDIR"}."/CdP.mae";
-	open(ARCH,$arch);
-	while(<ARCH>){
-		chomp;
-		print "$_\n";
-	}
-	print "\n";
-
-}
-
-
-
-
 #-------------------------------------------------------------------
 #VALIDACIONES-------------------------------------------------------
 #-------------------------------------------------------------------
 
 
+
+sub is_integer {
+   defined $_[0] && $_[0] =~ /^[+-]?\d+$/;
+}
+
 sub comprobarTiempoDeConversacion{
-	return 0;
+	my ($valor) = @_;
+
+	@VALORES = split(/,/,$valor);
+	foreach $val (@VALORES){
+		if( is_integer($val) ){return 0;}
+
+	}
+	return 1;
 
 }
 
 
 sub comprobarOficinas
 {
-	my ($oficinas) = @_;
-	if ( $oficinas eq ""){ return 1;}
-	else{ return 0; }
+	my ($valor) = @_;
+	if ( $valor eq "" ){ return 0;}
+	my $arch = $ENV{"MAEDIR"}."/agentes.mae";
+	my $pos = 3;
+	if ( &comprobarValorEnElArchivo($valor,$arch,$pos) eq '0' ){return 0;}
+	return 1;
 
 }
 
@@ -453,8 +448,42 @@ sub comprobarOficinas
 sub comprobarFecha
 {
 	my ($entrada) = @_;
-	if ( $entrada eq '' ) { return 1; }
-	return 0;
+	if($entrada eq ""){return 0;}
+
+	my @FECHAS = split(/,/,$entrada);
+
+	my ($segundo,$min,$h,$d,$mesActual,$anioActual,$diaSemana) = (localtime(time))[0,1,2,3,4,5,6];
+	$anioActual += 1900;
+	print "$mesActual,$anioActual\n";
+	
+	foreach my $fecha (@FECHAS){
+		
+		if( length $fecha eq '6' ){
+
+			my $anio = substr $fecha,0,4;
+			my $mes = substr $fecha,4,5;
+			$mes =~ s/(0)([0-9])/\2/;
+
+
+			if( &is_integer($anio) and
+				&is_integer($mes) and
+				$anio <= $anioActual and
+				$mes <= 12 and
+				$mes >= 1){
+					if( $anio == $anioActual and
+						$mes <= $mesActual ){
+						return 0;
+					}
+					elsif( $anio < $anioActual){
+						return 0;
+					}
+
+				}
+				
+		}
+	} 
+
+	return 1;
 	
 
 }
@@ -519,7 +548,6 @@ sub comprobarNumeroA{
 
 	}
 	chop($cods);
-	print "$cods";
 	if ( &comprobarValorEnElArchivo($cods,$arch,$pos) eq '0' ){return 0;}
 	return 1;
 
@@ -527,31 +555,32 @@ sub comprobarNumeroA{
 }
 
 
-sub comprobarNumeroB{
-	my ($valor) = @_;
-	my $arch = $ENV{"MAEDIR"}."/CdP.mae";
-	my $pos = 0;
-	my $cods = "";
-	my @NUMEROS = split(/,/, $valor);
-	foreach my $num (@NUMEROS){
-	
-		my ($codigo,$linea) = split(/-/,$num);
-		
-		$cods = $cods.$codigo.",";
-
-	}
-	chop($cods);
-	if ( &comprobarValorEnElArchivo($cods,$arch,$pos) eq '0' ){return 0;}
-	return 1;
-}
+#sub comprobarNumeroB{
+#	my ($valor) = @_;
+#	my $arch = $ENV{"MAEDIR"}."/CdP.mae";
+#	my $pos = 0;
+#	my $cods = "";
+#	my @NUMEROS = split(/,/, $valor);
+#	foreach my $num (@NUMEROS){
+#	
+#		my ($codigo,$linea) = split(/-/,$num);
+#		
+#		$cods = $cods.$codigo.",";
+#
+#	}
+#	chop($cods);
+#	if ( &comprobarValorEnElArchivo($cods,$arch,$pos) eq '0' ){return 0;}
+#	return 1;
+#}
 
 
 sub comprobarValorEnElArchivo{
 
 	my ($valor,$arch,$pos) = @_;
 	my @VALS = split(/,/,$valor);
-	print "ARCHIVO $arch\n";
+
 	open(ARCH,$arch);
+
 	while(<ARCH>){
 		chomp;
 		my @tokens = split(/;/,$_);
@@ -622,7 +651,7 @@ sub filtrarRegistrosDelArchivo{
 
 	my ($file,@filtrosRegistros) = @_;
 
-	my ($filtroCentral,$filtroAgente,$filtroUmbral,$filtroTipoLlamada,$filtroTiempoConvers,$filtroNumeroA,$filtroNumeroB) = @filtrosRegistros;	
+	my ($filtroCentral,$filtroAgente,$filtroUmbral,$filtroTipoLlamada,$filtroTiempoConvers,$filtroNumeroA) = @filtrosRegistros;	
 
 	open(ARCH,"$file");
 
@@ -634,10 +663,10 @@ sub filtrarRegistrosDelArchivo{
 			&perteneceAlFiltro($central,$filtroCentral) eq '0' and
 			&perteneceAlFiltro($tipoLLam,$filtroTipoLlamada) eq '0' and
 			&perteneceAlFiltro($tiempo,$filtroTiempoConvers) eq '0' and
-			&perteneceAlFiltro($Aarea.$Alinea,$filtroNumeroA) eq '0' and
-			&perteneceAlFiltro($Barea.$Blinea,$filtroNumeroB) eq '0' and
+			&perteneceAlFiltro($Aarea.'-'.$Alinea,$filtroNumeroA) eq '0' and
 			&perteneceAlFiltro($umbral,$filtroUmbral) eq '0' )
 		{
+			
 			print "$line\n";
 
 		}
@@ -646,9 +675,6 @@ sub filtrarRegistrosDelArchivo{
 
 
 }
-
-
-
 
 
 sub perteneceAlFiltro{
