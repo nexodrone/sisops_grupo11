@@ -405,7 +405,7 @@ levantarVariablesDesdeElArchivo () {
 
 muestraYlogueoIndividual () {	
 
-	CONTENIDO=$(ls $1)
+	CONTENIDO=$(ls "$1")
 	MSG="$2 ${DIRECTORIO_COLOR} $1 ${NC}"
 	
 	echo -e "$MSG"
@@ -568,7 +568,7 @@ if [ "$?" =  1 ]; then
 	comprobarInstalacion "$CONFIG_FILE"
 
 
-	VALOR_RETORNO=$?
+	VALOR_RETORNO="$?"
 
 
 	if [ "$VALOR_RETORNO" = 1 ]; then 
