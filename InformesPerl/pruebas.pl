@@ -179,11 +179,11 @@ sub llamadasSospechosas
 
 	my $input = '1';
 
-	while ( &comprobarOficinas($input) ne '0' )
+	do
 	{
 		$input = <STDIN>;
 		chomp( $input );
-	}
+	}while ( &comprobarOficinas($input) ne '0' );
 
 	my $oficinas= $input;
 	
@@ -206,11 +206,13 @@ sub llamadasSospechosas
 
 	$input = '1';
 	
-	while ( &comprobarFecha($input) ne '0' )
+	do
 	{
+		
 		$input = <STDIN>;
 		chomp( $input );
-	}
+		
+	}while ( &comprobarFecha($input) ne '0' );
 
 	my $fechas= $input;
 
@@ -362,7 +364,7 @@ sub filtrosParaRegistros
 	$respuesta = &obtenerSioNo;
 	my $filtroNumeroA ="";
 	if ( $respuesta eq '0' ){
-
+		
 		while( &comprobarNumeroA($filtroNumeroA) ne '0' ){
 			$filtroNumeroA = &obtenerFiltros("codigo de area - numero de linea: 11-31390136,220-31490141");
 			if ( "$filtroNumeroA" eq '-h' ) {
@@ -440,6 +442,9 @@ sub comprobarOficinas
 	my $arch = $ENV{"MAEDIR"}."/agentes.mae";
 	my $pos = 3;
 	if ( &comprobarValorEnElArchivo($valor,$arch,$pos) eq '0' ){return 0;}
+
+	print "Oficina/s invalida/s por favor intente nuevamente:\n";
+
 	return 1;
 
 }
@@ -454,7 +459,6 @@ sub comprobarFecha
 
 	my ($segundo,$min,$h,$d,$mesActual,$anioActual,$diaSemana) = (localtime(time))[0,1,2,3,4,5,6];
 	$anioActual += 1900;
-	print "$mesActual,$anioActual\n";
 	
 	foreach my $fecha (@FECHAS){
 		
@@ -482,7 +486,7 @@ sub comprobarFecha
 				
 		}
 	} 
-
+	print "Fecha/s invalida/s por favor intente nuevamente:\n";
 	return 1;
 	
 
