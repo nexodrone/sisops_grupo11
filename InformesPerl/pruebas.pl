@@ -198,6 +198,7 @@ sub imprimirNumerosDeSubllamadasPosibles{
 
 sub comprobarSubllamadas{
 	my ($subllamadas) = @_;
+	if ( $subllamadas eq "" ) {return 0;}
 	my $dir = $ENV{"REPODIR"};
 	opendir(DIR,"$dir");
 	my @FILES = readdir(DIR);
@@ -868,7 +869,7 @@ sub filtrarConsultasPrevias{
 	local (@registrosFiltrados);
 	
 	
-	my $dir = $ENV{"REPODIR"};
+	my $dir = $ENV{"REPODIR"}."/";
 	opendir(DIR,"$dir");
 	@FILES = readdir(DIR);
 
@@ -877,10 +878,11 @@ sub filtrarConsultasPrevias{
 		
 		
 		my ($subllam,$num) = split(/\./,$file);
-		print "$subllam\n";
+		
+		
 		#filtrar por oficinas y por fechas
-		if ( $subllam eq "subllamadas" and &perteneceAlFiltro($num,$nroSubLlamadas) eq '0' ){
-
+		if ( $subllam eq "subllamadas" &perteneceAlFiltro($num,$nroSubllamada) eq '0' ){
+			
 			#filtros de retgistros
 			&filtrarRegistrosDelArchivo($dir.$file,@filtrosRegistros);
 
