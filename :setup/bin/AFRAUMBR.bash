@@ -4,7 +4,7 @@
 GraLog.bash AFRAUMBR "Inicio de AFRAUMBR"
 #echo "Inicio de AFRAUMBR"  >> AFRAUMBR.log
 
-GraLog.bash AFRAUMBR "Cantidad de archivos a procesar: $(ls $ACEPDIR -1 | wc -l)"
+GraLog.bash AFRAUMBR "Cantidad de archivos a procesar: $(ls "$ACEPDIR" -1 | wc -l)"
 #echo "Cantidad de archivos a procesar: $(ls $ACEPDIR -1 | wc -l)" >> AFRAUMBR.log
 
 
