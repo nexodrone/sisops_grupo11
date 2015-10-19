@@ -5,7 +5,7 @@
 tipoLog="INFO"
 comandoLog="LOG"
 cantParam=$#
-userLog=$(who | grep 'pts' | cut -d ' ' -f 1)
+userLog=$(whoami)
 fechaLog=$(date "+%d/%m/%Y_%T")
 
 #Chequeo ambiente
