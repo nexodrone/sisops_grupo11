@@ -143,7 +143,7 @@ sub menuInformesPrincipal
 		chomp($input);
 		
 		if ( $input eq '1' ) { &llamadasSospechosas; }	#Consultas sobre archivos llam sospe
-		elsif ( $input eq '2' ) { } # Consultas previas
+		elsif ( $input eq '2' ) { &consultasPrevias; } # Consultas previas
 		elsif ( $input eq '3' ) { } #Salir
 		else {  &clearScreen;
 			print "Opcion invalida por favor ingrese nuevamente \n";
@@ -155,6 +155,111 @@ sub menuInformesPrincipal
 	&clearScreen;
 }
 
+
+sub hayArchivosDeSubllamadas{
+	my $dir = $ENV{"REPODIR"};
+	opendir(DIR,"$dir");
+	@FILES = readdir(DIR);
+	foreach $file (@FILES){
+		
+		my ($subllam,$num) = split(/\./,$file);
+		
+		if( $subllam eq "subllamadas")
+		{ closedir(DIR); return 0; }
+
+	}
+
+	closedir(DIR);
+	return 1;
+
+
+}
+
+sub imprimirNumerosDeSubllamadasPosibles{
+	my $dir = $ENV{"REPODIR"};
+	opendir(DIR,"$dir");
+	@FILES = readdir(DIR);
+	print "Numeros posibles:\n";
+	foreach $file (@FILES){
+		
+		my ($subllam,$num) = split(/\./,$file);
+		
+		if( $subllam eq "subllamadas")
+		{ print "$num\n";}
+
+	}
+	print "\n";
+
+	closedir(DIR);
+
+
+}
+
+
+sub comprobarSubllamadas{
+	my ($subllamadas) = @_;
+	my $dir = $ENV{"REPODIR"};
+	opendir(DIR,"$dir");
+	my @FILES = readdir(DIR);
+
+	my @SUBLLAMS = split(/,/,$subllamadas);
+
+	foreach $file (@FILES){
+		
+		my ($subllam,$num) = split(/\./,$file);
+		
+		if( $subllam eq "subllamadas")
+		{ 	foreach my $llam (@SUBLLAMS){
+				if( $num eq $llam ){
+					closedir(DIR); return 0; }
+			}
+		}
+
+	}
+	print "Numero incorrecto por favor intente nuevamente\n";
+	closedir(DIR);
+	return 1;
+	
+
+}
+
+
+
+
+
+sub consultasPrevias{
+
+	if (&hayArchivosDeSubllamadas ne '0'){
+		print "Actualmente no hay archivos de subllamadas en el directorio\n";
+		return 0;
+	}
+	print "Por favor ingrese la o las oficinas para las cuales desea realizar la consulta\n";
+	print "\n";
+	print "Para esto escriba los numeros de los archivos (subllamada.numero) separadas por , \n";
+	print "\n";
+	print "Por ejemplo:\n";
+	print "\n";
+	print "1,2,3\n";
+	print "\n";
+	print "Si desea realizar la consulta para todos los archivos no ingrese ninguno ( presione ENTER )\n";
+	print "\n";
+	&imprimirNumerosDeSubllamadasPosibles;
+
+	my $input = '1';
+
+	do
+	{
+		$input = <STDIN>;
+		chomp( $input );
+	}while ( &comprobarSubllamadas($input) ne '0' );
+	
+	my $nroSubllam = $input;
+	my @filtrosRegistros = &filtrosParaRegistros;
+
+	
+	&filtrarConsultasPrevias($nroSubllam,@filtrosRegistros);
+
+}
 
 
 
@@ -738,6 +843,82 @@ sub imprimirFiltros{
 		print "\n";
 	}
 }
+
+
+
+sub filtrarConsultasPrevias{
+	&clearScreen;
+
+	my ($nroSubllamada,@filtrosRegistros) = @_;
+
+
+	print "FILTROS UTILIZADOS:\n";
+	
+	
+	&imprimirFiltros($nroSubllamada,"NUMEROS DE ARCHIVOS DE SUBLLAMADAS:");
+	
+	&imprimirFiltros($filtrosRegistros[0],"CENTRALES:");
+	&imprimirFiltros($filtrosRegistros[1],"AGENTES:");
+	&imprimirFiltros($filtrosRegistros[2],"UMBRALES:");
+	&imprimirFiltros($filtrosRegistros[3],"TIPOS DE LLAMADAS:");
+	&imprimirFiltros($filtrosRegistros[4],"TIEMPO DE CONVERSACION:");
+	&imprimirFiltros($filtrosRegistros[5],"CODIGO DE AREA Y NUMERO DE LINEA:");
+	&imprimirFiltros($filtrosRegistros[6],"CODIGO DE PAIS Y NUMERO DE LINEA:");
+	
+	local (@registrosFiltrados);
+	
+	
+	my $dir = $ENV{"REPODIR"};
+	opendir(DIR,"$dir");
+	@FILES = readdir(DIR);
+
+	print "REGISTROS:\n";
+	foreach $file (@FILES){
+		
+		
+		my ($subllam,$num) = split(/\./,$file);
+		print "$subllam\n";
+		#filtrar por oficinas y por fechas
+		if ( $subllam eq "subllamadas" and &perteneceAlFiltro($num,$nroSubLlamadas) eq '0' ){
+
+			#filtros de retgistros
+			&filtrarRegistrosDelArchivo($dir.$file,@filtrosRegistros);
+
+			
+		
+			
+			
+		}	
+
+	}
+
+	@registrosFiltrados = sort(@registrosFiltrados);
+	if ( $seGuarda == 1 ) {
+		my ($nroSubllamada) = &proximaSubllamada;
+		my ($archivoSubllamada) = "$ENV{REPODIR}/subllamadas.$nroSubllamada";
+		open(SUBLLAMADA,">$archivoSubllamada");
+		foreach (@registrosFiltrados) {
+			print SUBLLAMADA "$_";
+		}
+		close(SUBLLAMADA);
+		print "Se grabaron ".@registrosFiltrados." registros en \"subllamadas.$nroSubllamada\"\n";
+	} else {
+		foreach (@registrosFiltrados) {
+			print "$_\n";
+		}
+	}
+	
+	print "\n";
+	print "Presione alguna tecla para volver al menu.\n";
+	my $input = <STDIN>;
+
+
+
+}
+
+
+
+
 
 
 sub filtrarLlamadasSospechosas{
