@@ -36,7 +36,7 @@ do
 
  else
 
-
+ rechazado=true
  CAMPOS=$(head -1 "$ACEPDIR/$FNAME" | awk -F ';' '{print NF}')
  if [ "$CAMPOS" != "" ] && [ "$CAMPOS" -ne 8 ]
  then
@@ -47,8 +47,12 @@ do
  else
 	#esto tiene que ir al log
 	GraLog.bash AFRAUMBR "Archivo a procesar $FNAME"
+	rechazado=false
 	#echo "Archivo a procesar $FNAME" >> AFRAUMBR.log
  fi
+
+ if [ $rechazado = false ]
+ then
 
  IFS=$'\n'
  set -f 
@@ -240,6 +244,7 @@ do
  #echo "No sospechosas: $nosospe" >> AFRAUMBR.log
 
  MoverA.bash "$ACEPDIR/$FNAME" "$PROCDIR/proc" AFRAUMBR
+fi
 fi
 done
 
