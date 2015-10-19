@@ -10,7 +10,7 @@ GraLog.bash AFRAUMBR "Cantidad de archivos a procesar: $(ls $ACEPDIR -1 | wc -l)
 
 for arch in "$ACEPDIR"/*
 do
- FNAME=$(basename $arch)
+ FNAME=$(basename "$arch")
  CODCENTRAL=$(echo $FNAME | cut -d'_' -f1)
  FECHAYPUNTO=$(echo $FNAME | cut -d'_' -f2)
  FECHA=$(echo $FECHAYPUNTO | cut -d'.' -f1)
