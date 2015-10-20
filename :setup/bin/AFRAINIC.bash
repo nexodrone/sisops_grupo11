@@ -114,6 +114,10 @@ comprobarInstalacion () {
 	if $BINDIR_INST; then comprobarArchivo "$VALOR/AFRARECI.bash"; if [ "$?" = 1 ]; then BINDIR_INST=false; fi; fi
 	if $BINDIR_INST; then comprobarArchivo "$VALOR/AFRAUMBR.bash"; if [ "$?" = 1 ]; then BINDIR_INST=false; fi; fi
 	if $BINDIR_INST; then comprobarArchivo "$VALOR/AFRALIST.pl"; if [ "$?" = 1 ]; then BINDIR_INST=false; fi; fi
+	if $BINDIR_INST; then comprobarArchivo "$VALOR/GraLog.bash"; if [ "$?" = 1 ]; then BINDIR_INST=false; fi; fi
+	if $BINDIR_INST; then comprobarArchivo "$VALOR/MoverA.bash"; if [ "$?" = 1 ]; then BINDIR_INST=false; fi; fi
+	if $BINDIR_INST; then comprobarArchivo "$VALOR/Arrancar.bash"; if [ "$?" = 1 ]; then BINDIR_INST=false; fi; fi
+	if $BINDIR_INST; then comprobarArchivo "$VALOR/Detener.bash"; if [ "$?" = 1 ]; then BINDIR_INST=false; fi; fi
 
 
 
@@ -572,7 +576,7 @@ if [ "$?" =  1 ]; then
 
 
 	if [ "$VALOR_RETORNO" = 1 ]; then 
-		printError "La instalacion no fue realizada correctamente faltan variables en el archivo de configuracion o estan mal definidas"
+		printError "La instalacion no fue realizada correctamente"
 		echo -e "Por favor realice nuevamente la instalacion invocando a \"/path/AFRAINST.bash\" por ejemplo \"/home/user/program/AFRAINST.bash\"\n"	
 		return 1
 
