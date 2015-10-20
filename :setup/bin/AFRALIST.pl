@@ -984,7 +984,7 @@ sub mostrarAgentes{
 	while(<AGENTES>){
 		chomp;
 		@tokens = split(/;/,$_);
-		print "$tokens[0] \n";
+		print "$tokens[2] \n";
 	}
 	print "\n";
 
@@ -1011,11 +1011,11 @@ sub mostrarUmbrales{
 }
 
 
-sub mostrarTipoLlamada{
+sub mostrarTipoLlamadas{
 	print "\n";
 	print "Tipos de llamadas:\n";
 	print "\n";
-	$arch = $ENV{"MAEDIR"}."/tllama.mae";
+	$arch = $ENV{"MAEDIR"}."/tllama.tab";
 	open(ARCH,$arch);
 	while(<ARCH>){
 		chomp;
@@ -1398,7 +1398,9 @@ sub filtrosParaRegistros
 		while( &comprobarTiempoDeConversacion($filtroTiempoConvers) ne '0' ){
 			$filtroTiempoConvers = &obtenerFiltros("133,122,10");
 			if ( "$filtroTiempoConvers" eq '-h' ) {
-				&mostrarTiempoConversacion;			
+				print "\n";
+				print "El tiempo de conversacion debe ser un numero entero decimal\n";	
+				print "\n";
 			}
 		}
 	}
